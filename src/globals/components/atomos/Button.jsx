@@ -10,7 +10,7 @@ export const Button = ({
 }) => {
   
   // Estilos base - border invisible para evitar el salto
-  const baseStyles = "font-semibold rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2 border-2 border-transparent";
+  const baseStyles = "font-semibold rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2 border-2";
   
   // Variantes de color
   // Normal: filled | Hover: fondo blanco con borde | Active: mismo color con overlay gris
@@ -38,6 +38,18 @@ export const Button = ({
       hover: "hover:brightness-80 hover:border-complementary-01 hover:text-text-01",
       active: "active:bg-complementary-01 active:brightness-90 active:border-transparent active:text-text-03",
       disabled: "disabled:bg-neutral-02 disabled:text-neutral-03 disabled:border-transparent"
+    },
+    secondaryUNO: {
+      normal:  "bg-secondary-01 text-text-03",
+      hover:   "hover:bg-secondary-01 hover:brightness-90 hover:text-text-03 hover:border-secondary-01",
+      active:  "active:bg-secondary-01 active:brightness-70 active:text-text-03 active:border-secondary-01",
+      disabled: "disabled:bg-neutral-02 disabled:text-neutral-03 disabled:border-neutral-02"
+    },
+    white: {
+      normal:  "bg-text-03 text-primary-01 border-primary-01 border-2",
+      hover:   "hover:bg-secondary-01 hover:brightness-90 hover:text-text-03 hover:border-secondary-01",
+      active:  "active:bg-secondary-01 active:brightness-70 active:text-text-03 active:border-secondary-01",
+      disabled: "disabled:bg-neutral-02 disabled:text-neutral-03 disabled:border-neutral-02"
     }
   };
   
