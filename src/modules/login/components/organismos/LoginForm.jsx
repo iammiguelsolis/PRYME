@@ -1,4 +1,5 @@
-import { Button } from "../atomos/Button";
+
+import { Button } from "../../../../globals/components/atomos/Button";
 import { FormField } from "../moleculas/FormField";
 
 export const LoginForm = () => {
