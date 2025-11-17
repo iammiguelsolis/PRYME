@@ -12,7 +12,7 @@ const Login = () => {
       <div className="absolute -bottom-24 -left-24 w-48 h-48 sm:-bottom-32 sm:-left-32 sm:w-80 sm:h-80 md:-bottom-40 md:-left-40 md:w-[500px] md:h-[500px] border-secondary-01 border-[15px] sm:border-[40px] md:border-[60px] rounded-full"></div>
 
       {/* Contenedor principal del Login */}  
-      <div class="relative z-10 w-full max-w-4xl md:min-h-[500px] mx-auto 
+      <div className="relative z-10 w-full max-w-4xl md:min-h-[500px] mx-auto 
      bg-neutral-01 rounded-xl 
      shadow-[-20px_20px_10px_rgba(0,0,0,0.20)]
      overflow-hidden grid grid-cols-1 md:grid-cols-2">

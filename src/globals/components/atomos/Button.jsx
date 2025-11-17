@@ -50,6 +50,12 @@ export const Button = ({
       hover:   "hover:bg-secondary-01 hover:brightness-90 hover:text-text-03 hover:border-secondary-01",
       active:  "active:bg-secondary-01 active:brightness-70 active:text-text-03 active:border-secondary-01",
       disabled: "disabled:bg-neutral-02 disabled:text-neutral-03 disabled:border-neutral-02"
+    },
+    whiteRed: {
+      normal:  "bg-text-03 text-red-500 border-red-500 border-2",
+      hover:   "hover:bg-red-600 hover:brightness-90 hover:text-text-03 hover:border-red-600",
+      active:  "active:bg-red-700 active:brightness-70 active:text-text-03 active:border-red-700",
+      disabled: "disabled:bg-neutral-02 disabled:text-neutral-03 disabled:border-neutral-02"
     }
   };
   
