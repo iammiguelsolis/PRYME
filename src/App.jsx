@@ -4,6 +4,8 @@ import Login from "./modules/login/page/Login";
 import { MainLayout } from "./globals/layaout/MainLayout";
 import RegistrarVentaPage from "./modules/ventas/page/RegistrarVentaPage";
 
+import RegistrarIngresoPage from "./modules/inventario/page/RegistrarIngresoPage";
+
 
 function App() {
   return (
@@ -15,9 +17,11 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/inicio" element={<InicioPage />} />
           <Route path="/ventas" element={<RegistrarVentaPage />} />
+
+          <Route path="/inventario/registrarIngreso" element={<RegistrarIngresoPage />} />
         </Route>
 
-      </Routes> 
+      </Routes>
     </Router>
   );
 }
