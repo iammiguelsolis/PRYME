@@ -5,6 +5,7 @@ import { MainLayout } from "./globals/layaout/MainLayout";
 import RegistrarVentaPage from "./modules/ventas/page/RegistrarVentaPage";
 import RegistrarIngresoPage from "./modules/inventario/page/RegistrarIngresoPage";
 import Reportes from "./modules/reportes/pages/Reportes";
+import VentasDashboard from "./modules/ventasDashboard/page/VentasDashboard";
 
 function App() {
   return (
@@ -15,10 +16,11 @@ function App() {
 
         <Route element={<MainLayout />}>
           <Route path="/inicio" element={<InicioPage />} />
-          <Route path="/ventas" element={<RegistrarVentaPage />} />
+          <Route path="/ventas/registrar" element={<RegistrarVentaPage />} />
 
           <Route path="/inventario/registrarIngreso" element={<RegistrarIngresoPage />} />
-          <Route path='reportes' element={<Reportes />} />
+          <Route path='/reportes' element={<Reportes />} />
+          <Route path='/ventas' element={<VentasDashboard />} />
         </Route>
 
       </Routes>

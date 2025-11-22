@@ -27,30 +27,25 @@ const Reportes = () => {
   const [isExportOpen, setIsExportOpen] = useState(false);
 
   return (
-    <div className="p-6 space-y-6 h-[calc(100vh-80px)] overflow-y-auto pr-2">
+    <div className="p-6 space-y-6 h-[calc(100vh-80px)] overflow-y-auto pr-2 bg-neutral-03 h-full">
 
 
       {/* HEADER */}
       <div className="flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-text-01">
-            Reportes del negocio
-          </h1>
-          <p className="text-sm text-text-02 mt-1">
-            Visualiza el rendimiento de ventas, productos y sucursales.
-          </p>
-        </div>
+        <h1 className="flex items-center text-l font-bold text-text-01 bg-neutral-01 rounded-4xl shadow-md p-2 px-4 mb-4 w-full">
+          Reportes
+        </h1>
 
         {/* BOTÓN EXPORTAR */}
         <Button
           type="button"
           variant="secondaryUNO"
           size="medium"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 -mt-3 "
           onClick={() => setIsExportOpen(true)}
         >
-          <HiOutlineArrowUpOnSquare className="w-5 h-5" />
-          Exportar estadísticas / informe
+          <HiOutlineArrowUpOnSquare className="w-6 h-5" />
+          Exportar
         </Button>
       </div>
 
