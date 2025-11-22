@@ -3,9 +3,8 @@ import InicioPage from "./modules/inicio/page/InicioPage";
 import Login from "./modules/login/page/Login";
 import { MainLayout } from "./globals/layaout/MainLayout";
 import RegistrarVentaPage from "./modules/ventas/page/RegistrarVentaPage";
-
 import RegistrarIngresoPage from "./modules/inventario/page/RegistrarIngresoPage";
-
+import Reportes from "./modules/reportes/pages/Reportes";
 
 function App() {
   return (
@@ -19,6 +18,7 @@ function App() {
           <Route path="/ventas" element={<RegistrarVentaPage />} />
 
           <Route path="/inventario/registrarIngreso" element={<RegistrarIngresoPage />} />
+          <Route path='reportes' element={<Reportes />} />
         </Route>
 
       </Routes>
