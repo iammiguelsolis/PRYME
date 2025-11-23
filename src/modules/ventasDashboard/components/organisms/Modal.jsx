@@ -1,6 +1,11 @@
 import { X } from 'lucide-react';
 
 export const Modal = ({ isOpen, onClose, title, children, width = 'max-w-3xl' }) => {
+  // Prevenir scroll del body cuando el modal está abierto
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
+  }
+
   return (
     <>
       {/* Overlay con fade */}
@@ -19,10 +24,8 @@ export const Modal = ({ isOpen, onClose, title, children, width = 'max-w-3xl' })
       >
         {/* HEADER */}
         <div className="p-4 border-b border-[#E4E7EE]">
-
           {/* RECTÁNGULO AZUL AMPLIO - TÍTULO + X */}
           <div className="border-2 border-primary-02 rounded-2xl px-5 py-3 w-full flex items-center justify-between">
-            
             {/* TÍTULO */}
             <h2 className="text-2xl font-bold text-primary-02">
               {title}
@@ -35,7 +38,6 @@ export const Modal = ({ isOpen, onClose, title, children, width = 'max-w-3xl' })
             >
               <X size={26} />
             </button>
-
           </div>
         </div>
 
