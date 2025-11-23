@@ -1,12 +1,22 @@
 import { X } from 'lucide-react';
 
 export const Modal = ({ isOpen, onClose, title, children, width = 'max-w-3xl' }) => {
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className={`bg-white rounded-xl shadow-xl w-full ${width} max-h-[90vh] overflow-auto`}>
-
+    <>
+      {/* Overlay con fade */}
+      <div 
+        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={onClose}
+      />
+      
+      {/* Panel lateral */}
+      <div 
+        className={`fixed top-0 right-0 h-full w-full ${width} bg-white shadow-2xl z-50 
+          transform transition-transform duration-300 ease-in-out
+          ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+      >
         {/* HEADER */}
         <div className="p-4 border-b border-[#E4E7EE]">
 
@@ -29,12 +39,11 @@ export const Modal = ({ isOpen, onClose, title, children, width = 'max-w-3xl' })
           </div>
         </div>
 
-        {/* CONTENIDO */}
-        <div className="p-5">
+        {/* CONTENIDO con scroll */}
+        <div className="p-5 overflow-y-auto h-[calc(100%-89px)]">
           {children}
         </div>
-
       </div>
-    </div>
+    </>
   );
 };
