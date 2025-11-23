@@ -1,4 +1,4 @@
-// src/modules/reportes/components/organismos/VentasPorSucursalChart.jsx
+import { useMemo } from "react";
 import {
   ResponsiveContainer,
   PieChart,
@@ -8,29 +8,40 @@ import {
   Tooltip,
 } from "recharts";
 
-const data = [
-  { name: "Mega Plaza", value: 45000 },
-  { name: "Plaza Norte", value: 28000 },
-  { name: "Plaza San Miguel", value: 38000 },
-];
+const COLORS = ["#F29F1B", "#1B8EF2", "#22A2F2", "#34D399", "#A78BFA"];
 
-const COLORS = ["#F29F1B", "#1B8EF2", "#22A2F2"];
+export const VentasPorSucursalChart = ({ ventas = [] }) => {
+  const data = useMemo(() => {
+    // Agrupar ventas por sucursal
+    const ventasPorSucursal = {};
+    
+    ventas.forEach(venta => {
+      const sucursal = venta.sucursal || "Sin sucursal";
+      if (!ventasPorSucursal[sucursal]) {
+        ventasPorSucursal[sucursal] = 0;
+      }
+      ventasPorSucursal[sucursal] += venta.total;
+    });
 
-export const VentasPorSucursalChart = () => {
+    // Convertir a array para el gráfico
+    const resultado = Object.entries(ventasPorSucursal)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
+
+    return resultado.length > 0 ? resultado : [{ name: "Sin datos", value: 0 }];
+  }, [ventas]);
+
   return (
     <div className="bg-neutral-01 rounded-2xl shadow-md p-6 flex flex-col gap-4">
-      
-      {/* Título y descripción */}
       <div>
         <h3 className="text-sm font-semibold text-text-01 mb-1">
           Ventas por sucursal
         </h3>
         <p className="text-xs text-text-02 max-w-md">
-          Distribución de ventas entre Mega Plaza, Plaza Norte y Plaza San Miguel.
+          Distribución de ventas entre las diferentes sucursales.
         </p>
       </div>
 
-      {/* 🔥 GRÁFICO CENTRADO */}
       <div className="w-full flex justify-center">
         <div className="w-[260px] h-[220px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -48,12 +59,13 @@ export const VentasPorSucursalChart = () => {
                 ))}
               </Pie>
               <Legend verticalAlign="bottom" height={36} />
-              <Tooltip />
+              <Tooltip 
+                formatter={(value) => `S/ ${value.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
       </div>
-
     </div>
   );
 };

@@ -1,45 +1,33 @@
-// src/modules/reportes/components/organismos/ResumenTabla.jsx
+import { useMemo } from "react";
 import { MetricRow } from "../moleculas/MetricRow";
 
-const rows = [
-  {
-    fecha: "15/11/2025",
-    sucursal: "Mega Plaza",
-    total: "S/ 3,450.00",
-    productos: 12,
-    devoluciones: "No",
-  },
-  {
-    fecha: "15/11/2025",
-    sucursal: "Plaza Norte",
-    total: "S/ 2,800.00",
-    productos: 9,
-    devoluciones: "No",
-  },
-  {
-    fecha: "14/11/2025",
-    sucursal: "Plaza San Miguel",
-    total: "S/ 4,120.00",
-    productos: 15,
-    devoluciones: "Sí",
-  },
-  {
-    fecha: "14/11/2025",
-    sucursal: "Mega Plaza",
-    total: "S/ 1,780.00",
-    productos: 6,
-    devoluciones: "No",
-  },
-  {
-    fecha: "13/11/2025",
-    sucursal: "Plaza Norte",
-    total: "S/ 5,230.00",
-    productos: 18,
-    devoluciones: "No",
-  },
-];
+export const ResumenTabla = ({ ventas = [] }) => {
+  const rows = useMemo(() => {
+    return ventas.slice(0, 10).map(venta => {
+      // Formatear fecha
+      const fecha = new Date(venta.fecha);
+      const fechaFormateada = fecha.toLocaleDateString('es-PE', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
 
-export const ResumenTabla = () => {
+      // Contar productos
+      const numProductos = venta.productos.reduce((sum, p) => sum + p.cantidad, 0);
+
+      // Verificar si tiene devolución
+      const tieneDevoluciones = venta.total < (venta.subtotal - venta.descuento) || venta.productos.length === 0;
+
+      return {
+        fecha: fechaFormateada,
+        sucursal: venta.sucursal,
+        total: `S/ ${venta.total.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`,
+        productos: numProductos,
+        devoluciones: tieneDevoluciones ? "Sí" : "No"
+      };
+    });
+  }, [ventas]);
+
   return (
     <div className="bg-neutral-01 rounded-2xl shadow-md p-4">
       <h3 className="text-sm font-semibold text-text-01 mb-3">
@@ -53,18 +41,22 @@ export const ResumenTabla = () => {
               <th className="px-4 py-2 font-semibold">Fecha</th>
               <th className="px-4 py-2 font-semibold">Sucursal</th>
               <th className="px-4 py-2 font-semibold">Total de la venta</th>
-              <th className="px-4 py-2 font-semibold text-center">
-                N° productos
-              </th>
-              <th className="px-4 py-2 font-semibold text-center">
-                Devoluciones
-              </th>
+              <th className="px-4 py-2 font-semibold text-center">N° productos</th>
+              <th className="px-4 py-2 font-semibold text-center">Devoluciones</th>
             </tr>
           </thead>
           <tbody className="bg-neutral-01">
-            {rows.map((row) => (
-              <MetricRow key={`${row.fecha}-${row.sucursal}`} {...row} />
-            ))}
+            {rows.length > 0 ? (
+              rows.map((row, index) => (
+                <MetricRow key={`${row.fecha}-${row.sucursal}-${index}`} {...row} />
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
+                  No hay ventas registradas
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
