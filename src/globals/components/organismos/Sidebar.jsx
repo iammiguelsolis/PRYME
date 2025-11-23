@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import PRYME from '../../../assets/PRYME_fondoBlanco.svg'
+import { useNavigate, useLocation } from 'react-router-dom';
+import PRYME from '../../../assets/PRYME_fondoBlanco.svg';
 
 import { 
   HiOutlineHome, 
@@ -12,8 +11,13 @@ import {
 import SidebarLink from '../moleculas/SidebarLink';
 
 export const Sidebar = () => {
-  const [activeLink, setActiveLink] = useState('inicio');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Determinar qué link está activo basado en la URL actual
+  const isActive = (path) => {
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <aside className="w-64 h-screen bg-neutral-01 p-4 flex flex-col shadow-lg">
@@ -27,37 +31,37 @@ export const Sidebar = () => {
       <nav>
         <ul className="space-y-2">
 
-          <li onClick={() => { setActiveLink('inicio'); navigate('/inicio'); }}>
+          <li onClick={() => navigate('/inicio')}>
             <SidebarLink
               icon={HiOutlineHome}
-              isActive={activeLink === 'inicio'}
+              isActive={isActive('/inicio')}
             >
               Inicio
             </SidebarLink>
           </li>
 
-          <li onClick={() => { setActiveLink('inventario'); navigate('/inventario'); }}>
+          <li onClick={() => navigate('/inventario')}>
             <SidebarLink
               icon={HiOutlineArchiveBox}
-              isActive={activeLink === 'inventario'}
+              isActive={isActive('/inventario')}
             >
               Inventario
             </SidebarLink>
           </li>
 
-          <li onClick={() => { setActiveLink('ventas'); navigate('/ventas'); }}>
+          <li onClick={() => navigate('/ventas')}>
             <SidebarLink
               icon={HiOutlineTag}
-              isActive={activeLink === 'ventas'}
+              isActive={isActive('/ventas')}
             >
               Ventas
             </SidebarLink>
           </li>
 
-          <li onClick={() => { setActiveLink('reportes'); navigate('/reportes'); }}>
+          <li onClick={() => navigate('/reportes')}>
             <SidebarLink
               icon={HiOutlineChartBar}
-              isActive={activeLink === 'reportes'}
+              isActive={isActive('/reportes')}
             >
               Reportes
             </SidebarLink>
