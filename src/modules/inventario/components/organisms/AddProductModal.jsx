@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '../../../../globals/components/atomos/Button';
 import { FormField } from '../molecules/FormField';
 import { Modal } from '../molecules/Modal';
@@ -6,25 +7,124 @@ import { SelectField } from '../molecules/SelectField';
 import FOTO from '../../../../assets/images/3d_avatar_21.png';
 
 export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
+  const [formData, setFormData] = useState({
+    modelo: '',
+    cantidad: '',
+    color: '',
+    talla: '',
+    costoUnitario: '',
+  });
+
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = () => {
+    // Validaciones
+    if (!formData.modelo || !formData.cantidad || !formData.color || !formData.talla || !formData.costoUnitario) {
+      alert('Por favor complete todos los campos');
+      return;
+    }
+
+    onAdd({
+      modelo: formData.modelo,
+      color: formData.color,
+      talla: formData.talla,
+      cantidad: parseInt(formData.cantidad),
+      costoUnitario: parseFloat(formData.costoUnitario),
+    });
+
+    // Limpiar form
+    setFormData({
+      modelo: '',
+      cantidad: '',
+      color: '',
+      talla: '',
+      costoUnitario: '',
+    });
+  };
+
+  const handleClose = () => {
+    setFormData({
+      modelo: '',
+      cantidad: '',
+      color: '',
+      talla: '',
+      costoUnitario: '',
+    });
+    onClose();
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={handleClose}>
       <SectionHeader title="Añadir Producto" />
 
       <div className="grid grid-cols-2 gap-6">
         {/* Columna Izquierda: Formulario */}
         <div className="flex flex-col space-y-4">
-          {/* Aquí iría el SearchInput */}
-          <FormField label="Seleccionar Modelo" id="search" placeholder="Buscar Modelo" />
+          <SelectField 
+            label="Seleccionar Modelo" 
+            id="modelo"
+            value={formData.modelo}
+            onChange={(e) => handleChange('modelo', e.target.value)}
+          >
+            <option value="">Seleccione modelo</option>
+            <option value="Nike Air Force">Nike Air Force</option>
+            <option value="Nike SB DUNK">Nike SB DUNK</option>
+            <option value="Nike Air Max">Nike Air Max</option>
+            <option value="Adidas Samba">Adidas Samba</option>
+            <option value="Adidas Gazelle">Adidas Gazelle</option>
+            <option value="Adidas Forum Low">Adidas Forum Low</option>
+            <option value="NB 560 Grey">NB 560 Grey</option>
+          </SelectField>
 
-          <FormField label="Cantidad" id="cantidad" placeholder="Cantidad" type="number" />
-          <SelectField label="Color" id="color">
-            <option>Rojo</option><option>Verde</option><option>Azul</option>
+          <FormField 
+            label="Cantidad" 
+            id="cantidad" 
+            placeholder="Ej: 10" 
+            type="number"
+            value={formData.cantidad}
+            onChange={(e) => handleChange('cantidad', e.target.value)}
+          />
+
+          <FormField 
+            label="Costo Unitario (S/.)" 
+            id="costoUnitario" 
+            placeholder="Ej: 180.00" 
+            type="number"
+            value={formData.costoUnitario}
+            onChange={(e) => handleChange('costoUnitario', e.target.value)}
+          />
+
+          <SelectField 
+            label="Color" 
+            id="color"
+            value={formData.color}
+            onChange={(e) => handleChange('color', e.target.value)}
+          >
+            <option value="">Seleccione color</option>
+            <option value="Negro">Negro</option>
+            <option value="Blanco">Blanco</option>
+            <option value="Rojo">Rojo</option>
+            <option value="Verde">Verde</option>
+            <option value="Azul">Azul</option>
+            <option value="Gris">Gris</option>
           </SelectField>
-          <SelectField label="Talla" id="talla">
-            <option>42</option><option>43</option><option>44</option>
-          </SelectField>
-          <SelectField label="Sucursal Origen" id="origen">
-            <option>Lima Centro</option><option>Almacén</option>
+
+          <SelectField 
+            label="Talla" 
+            id="talla"
+            value={formData.talla}
+            onChange={(e) => handleChange('talla', e.target.value)}
+          >
+            <option value="">Seleccione talla</option>
+            <option value="38">38</option>
+            <option value="39">39</option>
+            <option value="40">40</option>
+            <option value="41">41</option>
+            <option value="42">42</option>
+            <option value="43">43</option>
+            <option value="44">44</option>
           </SelectField>
         </div>
 
@@ -40,10 +140,10 @@ export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
 
       {/* Botones de Acción */}
       <div className="flex justify-end space-x-4 mt-8">
-        <Button size="medium" variant="secondaryUNO" onClick={onAdd}>
+        <Button size="medium" variant="secondaryUNO" onClick={handleSubmit}>
           Añadir Producto
         </Button>
-        <Button size="medium" variant="white" onClick={onClose}>
+        <Button size="medium" variant="white" onClick={handleClose}>
           Cancelar
         </Button>
       </div>

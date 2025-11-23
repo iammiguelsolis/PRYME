@@ -8,23 +8,29 @@ import Reportes from "./modules/reportes/pages/Reportes";
 import VentasDashboard from "./modules/ventasDashboard/page/VentasDashboard";
 import InventarioDashboard from "./modules/inventarioDashboard/page/InventarioDashboard";
 
+// Importar el Provider
+import { InventarioProvider } from "./context/InventarioContext";
+
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+      {/* Envolver todo con el Provider para persistencia */}
+      <InventarioProvider>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
 
-        <Route element={<MainLayout />}>
-          <Route path="/inicio" element={<InicioPage />} />
-          <Route path="/ventas/registrar" element={<RegistrarVentaPage />} />
-          <Route path='/inventario' element={<InventarioDashboard />} />
-          <Route path="/inventario/registrarIngreso" element={<RegistrarIngresoPage />} />
-          <Route path='/reportes' element={<Reportes />} />
-          <Route path='/ventas' element={<VentasDashboard />} />
-        </Route>
+          <Route element={<MainLayout />}>
+            <Route path="/inicio" element={<InicioPage />} />
+            <Route path="/ventas/registrar" element={<RegistrarVentaPage />} />
+            <Route path='/inventario' element={<InventarioDashboard />} />
+            <Route path="/inventario/registrarIngreso" element={<RegistrarIngresoPage />} />
+            <Route path='/reportes' element={<Reportes />} />
+            <Route path='/ventas' element={<VentasDashboard />} />
+          </Route>
 
-      </Routes>
+        </Routes>
+      </InventarioProvider>
     </Router>
   );
 }

@@ -1,29 +1,94 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useInventario } from '../../../context/InventarioContext';
 
 import { EntryInfoForm } from '../components/organisms/EntryInfoForm';
 import { BatchList } from '../components/organisms/BatchList';
 import { EntryTotal } from '../components/organisms/EntryTotal';
-
 import { AddProductModal } from '../components/organisms/AddProductModal';
 import { SuccessModal } from '../components/organisms/SuccessModal';
 
 const RegistrarIngresoPage = () => {
-  // --- Estados para controlar los modales ---
-  const [isAddModalOpen, setAddModalOpen] = useState(false);
-  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
-  const [saleSuccessModalOpen, setSaleSuccessModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const { registrarIngreso } = useInventario();
 
-  // Funciones para abrir/cerrar modales
-  const handleAddProduct = () => {
-    setAddModalOpen(false); // Cierra el modal de añadir
-    setSuccessModalOpen(true); // Abre el modal de éxito
+  // Estados para modales
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false); // <-- Nombre corregido
+  const [nuevoIngresoId, setNuevoIngresoId] = useState(null);
+
+  // Estado del formulario de ingreso
+  const [datosIngreso, setDatosIngreso] = useState({
+    proveedor: '',
+    telefono: '',
+    tipo: 'compra',
+    sucursal: 'lima',
+    fecha: new Date().toISOString().split('T')[0],
+  });
+
+  // Lista de lotes/productos a ingresar
+  const [lotes, setLotes] = useState([]);
+
+  // Agregar producto al lote
+  const handleAddProduct = (nuevoProducto) => {
+    setLotes(prev => [...prev, {
+      id: Date.now(),
+      modelo: nuevoProducto.modelo,
+      color: nuevoProducto.color,
+      talla: nuevoProducto.talla,
+      cantidad: nuevoProducto.cantidad,
+      costoUnitario: nuevoProducto.costoUnitario,
+    }]);
+    setAddModalOpen(false);
   };
 
-  const handleRegisterSale = () => {
-    // Lógica de registro...
-    // al terminar:
-    setSaleSuccessModalOpen(true);
-    //alert("¡Venta Registrada! (Implementar modal de éxito de venta)");
+  // Eliminar producto del lote
+  const handleRemoveProduct = (id) => {
+    setLotes(prev => prev.filter(l => l.id !== id));
+  };
+
+  // Calcular totales
+  const totalUnidades = lotes.reduce((sum, l) => sum + l.cantidad, 0);
+  const totalCosto = lotes.reduce((sum, l) => sum + (l.cantidad * l.costoUnitario), 0);
+
+  // Registrar el ingreso completo
+  const handleRegistrarIngreso = () => {
+    if (lotes.length === 0) {
+      alert('Debe agregar al menos un producto');
+      return;
+    }
+    if (!datosIngreso.proveedor) {
+      alert('Debe seleccionar un proveedor');
+      return;
+    }
+
+    // Llamar al contexto para registrar
+    const idGenerado = registrarIngreso({
+      ...datosIngreso,
+      lotes: lotes
+    });
+
+    setNuevoIngresoId(idGenerado);
+    setSuccessModalOpen(true); // <-- CORREGIDO (antes: setIsSuccessModalOpen)
+  };
+
+  // Después del éxito
+  const handleSuccessClose = () => {
+    setSuccessModalOpen(false); // <-- CORREGIDO
+    // Limpiar formulario
+    setLotes([]);
+    setDatosIngreso({
+      proveedor: '',
+      telefono: '',
+      tipo: 'compra',
+      sucursal: 'lima',
+      fecha: new Date().toISOString().split('T')[0],
+    });
+  };
+
+  const handleVolverAInventario = () => {
+    setSuccessModalOpen(false); // <-- CORREGIDO
+    navigate('/inventario');
   };
 
   return (
@@ -33,31 +98,44 @@ const RegistrarIngresoPage = () => {
         Inventario / Registrar Ingreso
       </h1>
 
-      {/* Formulario cliente */}
-      <EntryInfoForm />
+      {/* Formulario info del ingreso */}
+      <EntryInfoForm 
+        datos={datosIngreso}
+        onChange={setDatosIngreso}
+      />
 
-      <BatchList onAddProductClick={() => setAddModalOpen(true)} />
+      {/* Lista de productos/lotes */}
+      <BatchList 
+        lotes={lotes}
+        onAddProductClick={() => setAddModalOpen(true)}
+        onRemoveProduct={handleRemoveProduct}
+      />
 
-      {/* Totales (abajo fijo) */}
-      <EntryTotal onRegisterSaleClick={handleRegisterSale} />
+      {/* Totales */}
+      <EntryTotal 
+        totalUnidades={totalUnidades}
+        totalCosto={totalCosto}
+        onRegisterSaleClick={handleRegistrarIngreso}
+        onCancelClick={() => navigate('/inventario')}
+      />
 
-      {/* Modales */}
+      {/* Modal Agregar Producto */}
       <AddProductModal
         isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
         onAdd={handleAddProduct}
       />
 
+      {/* Modal Éxito */}
       <SuccessModal
-        isOpen={saleSuccessModalOpen}
-        onClose={() => setSaleSuccessModalOpen(false)}
-        onRegisterAnother={() => {
-          setSaleSuccessModalOpen(false);
-        }}
+        isOpen={isSuccessModalOpen} // <-- Usa el estado correcto
+        onClose={handleSuccessClose}
+        ingresoId={nuevoIngresoId}
+        onRegisterAnother={handleSuccessClose}
+        onGoToInventario={handleVolverAInventario}
       />
     </div>
   );
 };
 
 export default RegistrarIngresoPage;
-
