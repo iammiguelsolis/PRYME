@@ -1,3 +1,5 @@
+import { Tooltip } from "recharts";
+
 const SidebarLink = ({ children, icon, isActive = false, onClick }) => {
   const IconComponent = icon;
 
@@ -9,7 +11,7 @@ const SidebarLink = ({ children, icon, isActive = false, onClick }) => {
     : "text-text-02 hover:bg-neutral-03/60";
 
   return (
-    <div onClick={onClick} className={`${baseClasses} ${activeClasses}`}>
+    <div title={`${children}`} onClick={onClick} className={`${baseClasses} ${activeClasses}` }>
       <IconComponent className="w-6 h-6 mr-3" />
       <span>{children}</span>
     </div>

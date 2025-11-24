@@ -22,7 +22,7 @@ export const Sidebar = () => {
   return (
     <aside className="w-64 h-screen bg-neutral-01 p-4 flex flex-col shadow-lg">
       
-      <div className="mb-2">
+      <div title='PRYME' className="mb-2">
         <img src={PRYME} alt="PRYME" width={150} />
       </div>
 

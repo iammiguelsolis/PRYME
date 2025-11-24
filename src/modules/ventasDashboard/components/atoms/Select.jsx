@@ -1,10 +1,11 @@
 import { ChevronDown } from 'lucide-react';
 
-export const Select = ({ label, options, value, onChange, disabled = false }) => (
-  <div className="flex flex-col gap-1">
+export const Select = ({ title='', label, options, value, onChange, disabled = false }) => (
+  <div title={title} className="flex flex-col gap-1">
     {label && <label className="text-xs text-[#0F172A]">{label}</label>}
     <div className="relative">
       <select 
+        title={options.find(opt => opt.value === value)?.label}
         value={value} 
         onChange={onChange} 
         disabled={disabled}

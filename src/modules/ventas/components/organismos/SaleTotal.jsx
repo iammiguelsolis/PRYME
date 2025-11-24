@@ -10,12 +10,12 @@ export const SaleTotal = ({
 }) => (
   <div className="bg-neutral-01 rounded-lg shadow-md p-6 mt-6 flex justify-between items-center">
     <div className="flex gap-4 items-center">
-      <div className="text-sm">
+      <div title="Subtotal" className="text-sm">
         <span className="text-gray-500">Subtotal: </span>
         <span className="font-medium">S/. {subtotal.toFixed(2)}</span>
       </div>
       
-      <div className="flex items-center gap-2">
+      <div title="Descuento" className="flex items-center gap-2">
         <span className="text-sm text-gray-500">Descuento:</span>
         <input
           type="number"
@@ -26,7 +26,7 @@ export const SaleTotal = ({
         />
       </div>
 
-      <div className="border border-primary-01 rounded-lg p-3">
+      <div title="Total Venta" className="border border-primary-01 rounded-lg p-3">
         <span className="text-xl font-bold text-primary-01">Total: S/. {total.toFixed(2)}</span>
       </div>
     </div>

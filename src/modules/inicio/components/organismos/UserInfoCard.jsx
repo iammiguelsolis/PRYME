@@ -6,8 +6,8 @@ import FOTO from '../../../../assets/images/3d_avatar_21.png';
 import { useNavigate } from 'react-router-dom';
 
 // Campo de información con ancho ampliado
-const UserInfoField = ({ label, value }) => (
-  <div className="border-2 border-primary-01 rounded-2xl p-3 mb-3 w-full max-w-[380px]">
+const UserInfoField = ({ title, label, value }) => (
+  <div title={title} className="border-2 border-primary-01 rounded-2xl p-3 mb-3 w-full max-w-[380px]">
     <div className="text-xs text-primary-02">{label}</div>
     <div className="font-semibold text-text-02">{value}</div>
   </div>
@@ -26,6 +26,7 @@ const UserInfoCard = ({buttonIcon, buttonIconPosition}) => {
         {/* Avatar */}
         <div className="flex-shrink-0 ms-5">
           <img 
+            title='Foto de Perfil'
             src={FOTO}
             alt="Avatar" 
             className="rounded-full object-cover"
@@ -35,10 +36,10 @@ const UserInfoCard = ({buttonIcon, buttonIconPosition}) => {
         
         {/* Campos de Info */}
         <div className="w-full max-w-[300px] ms-5">
-          <UserInfoField label="ID de Trabajador" value="23200338" />
-          <UserInfoField label="Nombre" value="Miguel Alonso Solis Cunza" />
-          <UserInfoField label="Sucursal" value="Lima Centro" />
-          <UserInfoField label="Total Ventas este Mes" value="15" />
+          <UserInfoField title="ID de Trabajador" label="ID de Trabajador" value="23200338" />
+          <UserInfoField title="Nombre Completo" label="Nombre" value="Miguel Alonso Solis Cunza" />
+          <UserInfoField title="Sucursal" label="Sucursal" value="Lima Centro" />
+          <UserInfoField title="Total Ventas este Mes" label="Total Ventas este Mes" value="15" />
         </div>
       </div>
       

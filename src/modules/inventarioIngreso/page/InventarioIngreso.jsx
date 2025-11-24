@@ -23,6 +23,8 @@ import { MdFilterAltOff } from 'react-icons/md';
 import { FaSearch } from 'react-icons/fa';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FaInfoCircle } from "react-icons/fa";
+import { HiPlus, HiOutlineTrash } from "react-icons/hi2";
+
 
 
 export default function InventarioIngreso() {
@@ -164,6 +166,7 @@ export default function InventarioIngreso() {
               xl:grid-cols-4
               gap-8">
               <Select
+                title='Proveedor'
                 placeholder="Proveedor"
                 options={[
                   { value: 'adidas', label: 'Adidas Perú' },
@@ -174,6 +177,7 @@ export default function InventarioIngreso() {
                 onChange={(e) => setFiltersIngreso({ ...filtersIngreso, proveedor: e.target.value })}
               />
               <Select
+                title='Fecha'
                 placeholder="Fecha"
                 options={[
                   { value: 'hoy', label: 'Hoy' },
@@ -183,12 +187,14 @@ export default function InventarioIngreso() {
                 onChange={(e) => setFiltersIngreso({ ...filtersIngreso, fecha: e.target.value })}
               />
               <Select
+                title='Sucursal'
                 placeholder="Sucursal"
                 options={[{ value: 'lima', label: 'Lima Centro' }]}
                 value={filtersIngreso.sucursal}
                 onChange={(e) => setFiltersIngreso({ ...filtersIngreso, sucursal: e.target.value })}
               />
               <Select
+                title='Tipo de ingreso'
                 placeholder="Tipo de ingreso"
                 options={[
                   { value: 'compra', label: 'Compra' },
@@ -229,7 +235,7 @@ export default function InventarioIngreso() {
             items={ingresosFiltrados}
             buttonText="Registrar ingreso"
             linkTo="/inventario/registrarIngreso"
-            buttonIcon={<IoIosAddCircleOutline className="w-5 h-5" />}
+            buttonIcon={<HiPlus className="w-6 h-6" />}
             buttonIconPosition="left"
             emptyMessage="No se encontraron ingresos con los filtros seleccionados."
             renderRow={(ing, index) => (
@@ -249,9 +255,10 @@ export default function InventarioIngreso() {
                 <td className="px-3 py-2 text-sm text-center text-text-01">
                   {ing.cantidad}
                 </td>
-                <td className="px-3 py-2 text-center">
+                <td className="px-3 py-2 text-center ">
                   <Button 
-                    size="small" variant="white" icon={<FaInfoCircle  className="w-5 h-5"/>} iconPosition='right' onClick={()=>handleVerDetalleIngreso(ing)}>
+                    size="small" variant="white" icon={<FaInfoCircle  className="w-5 h-5"/>} iconPosition='right' onClick={()=>handleVerDetalleIngreso(ing)} 
+                  >
                     Ver detalle
                   </Button>
                 </td>

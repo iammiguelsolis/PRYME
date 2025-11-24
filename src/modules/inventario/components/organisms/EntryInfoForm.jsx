@@ -12,8 +12,9 @@ export const EntryInfoForm = ({ datos, onChange }) => {
     <div className="bg-neutral-01 rounded-lg shadow-md p-6">
       <SectionHeader title="Datos del Ingreso" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-1">
-          <SelectField 
+        <div title="Proveedor" className="lg:col-span-1">
+          <SelectField
+            title={datos.proveedor || "Selecciona Proveedor"} 
             label="Proveedor" 
             id="proveedor"
             value={datos.proveedor}
@@ -26,8 +27,9 @@ export const EntryInfoForm = ({ datos, onChange }) => {
             <option value="New Balance Peru">New Balance Peru</option>
           </SelectField>
         </div>
-        <div className="lg:col-span-1">
-          <SelectField 
+        <div title="Sucursal" className="lg:col-span-1">
+          <SelectField
+            title={datos.sucursal.toUpperCase() || "Selecciona Sucursal"} 
             label="Sucursal" 
             id="sucursal"
             value={datos.sucursal}
@@ -37,8 +39,9 @@ export const EntryInfoForm = ({ datos, onChange }) => {
             <option value="online">No físico</option>
           </SelectField>
         </div>
-        <div className="lg:col-span-1">
+        <div title="Fecha" className="lg:col-span-1">
           <FormField 
+            title={datos.fecha || "Selecciona Fecha"}
             label="Fecha" 
             id="fecha" 
             type="date"

@@ -42,12 +42,12 @@ const InventarioTableCard = ({
         <div className="overflow-x-auto max-h-[430px] overflow-y-auto">
           <table className="w-full text-sm">
             {headers.length > 0 && (
-              <thead className="bg-neutral-02 sticky top-0 z-10">
+              <thead className="bg-primary-02 sticky top-0 z-10">
                 <tr>
                   {headers.map((header, idx) => (
                     <th
                       key={idx}
-                      className="px-3 py-2 text-[11px] font-semibold text-text-01 text-center uppercase tracking-wide"
+                      className="px-3 py-2 text-[11px] font-semibold text-text-03 text-center uppercase tracking-wide"
                     >
                       {header}
                     </th>
