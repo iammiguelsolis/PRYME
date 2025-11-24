@@ -13,6 +13,8 @@ import { DashboardCardHeader } from '../../inicio/components/moleculas/Dashboard
 import { Button } from '../../../globals/components/atomos/Button';
 import { useNavigate } from "react-router-dom";
 import { useVentas } from '../../../context/VentasContext';
+import { FaInfoCircle } from "react-icons/fa";
+
 
 export default function VentasDashboard() {
   const { ventas, registrarDevolucion, ventasDelDia } = useVentas();
@@ -169,7 +171,7 @@ export default function VentasDashboard() {
             <Button
               size="medium"
               variant="secondaryUNO"
-              className="-mt-4 flex items-center gap-2"
+              className="-mt-4 flex items-center justify-between gap-2 whitespace-nowrap "
               onClick={() => navigate("/ventas/registrar")}
             >
               Registrar Venta <Plus size={18} />
@@ -200,7 +202,13 @@ export default function VentasDashboard() {
                     <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.metodo}</td>
                     <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.total.toFixed(2)}</td>
                     <td className="px-4 py-4 text-center">
-                      <Button size="small" variant="white" onClick={() => handleVerDetalle(venta)}>
+                      <Button
+                        size="small"
+                        variant="white"
+                        onClick={() => handleVerDetalle(venta)}
+                        icon={<FaInfoCircle className="w-5 h-5" />}
+                        iconPosition="right"
+                      >
                         Ver Detalle
                       </Button>
                     </td>

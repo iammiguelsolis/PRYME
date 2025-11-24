@@ -6,14 +6,15 @@ export const Button = ({
   loading = false,
   children, 
   onClick,
-  className = ''
+  className = '',
+  icon = null,
+  iconPosition = 'left',
 }) => {
   
   // Estilos base - border invisible para evitar el salto
   const baseStyles = "font-semibold rounded-full transition-all duration-200 inline-flex items-center justify-center gap-2 border-2";
   
   // Variantes de color
-  // Normal: filled | Hover: fondo blanco con borde | Active: mismo color con overlay gris
   const variants = {
     primary: {
       normal: "bg-primary-01 text-text-03",
@@ -86,7 +87,28 @@ export const Button = ({
       {loading ? (
         <LoadingDots />
       ) : (
-        children
+        <>
+          {/* Ícono a la izquierda */}
+          {icon && iconPosition === 'left' && (
+            <span className="flex items-center">
+              {icon}
+            </span>
+          )}
+
+          {/* Texto / contenido */}
+          {children && (
+            <span className="flex items-center">
+              {children}
+            </span>
+          )}
+
+          {/* Ícono a la derecha */}
+          {icon && iconPosition === 'right' && (
+            <span className="flex items-center">
+              {icon}
+            </span>
+          )}
+        </>
       )}
     </button>
   );
