@@ -181,36 +181,35 @@ export default function VentasDashboard() {
           </div>
 
           {/* Tabla */}
-          <table className="w-full">
-            <thead className="bg-[#1B8EF2] sticky top-0 z-10">
-              <tr>
-                <th className="px-4 py-3 text-xs font-medium text-white text-center">ID Venta</th>
-                <th className="px-4 py-3 text-xs font-medium text-white text-center">Nombre Cliente</th>
-                <th className="px-4 py-3 text-xs font-medium text-white text-center">Doc Identidad</th>
-                <th className="px-4 py-3 text-xs font-medium text-white text-center">Canal</th>
-                <th className="px-4 py-3 text-xs font-medium text-white text-center">Metodo de Pago</th>
-                <th className="px-4 py-3 text-xs font-medium text-white text-center">Total (S/.)</th>
-                <th className="px-4 py-3 text-xs font-medium text-white text-center">Detalle</th>
-                <th className="px-4 py-3 text-xs font-medium text-white text-center">Accion</th>
-              </tr>
-            </thead>
-          </table>
-
-          {/* SOLO Tbody con Scroll */}
           <div className="max-h-[600px] overflow-y-auto">
             <table className="w-full">
+              <thead className="bg-[#1B8EF2] sticky top-0 z-10">
+                <tr>
+                  <th className="px-2 py-3 text-xs font-medium text-white text-center">ID Venta</th>
+                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Nombre Cliente</th>
+                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Doc Identidad</th>
+                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Canal</th>
+                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Metodo de Pago</th>
+                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Total (S/.)</th>
+                  <th className="px-8 py-3 text-xs font-medium text-white text-center">Detalle</th>
+                  <th className="px-8 py-3 text-xs font-medium text-white text-center">Acción</th>
+                </tr>
+              </thead>
+
               <tbody>
                 {ventasFiltradas.length > 0 ? (
                   ventasFiltradas.map((venta) => (
                     <tr key={venta.id} className="border-b border-[#E4E7EE]">
-                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.id}</td>
-                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.cliente}</td>
-                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.dni}</td>
-                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.canal}</td>
-                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.metodo}</td>
-                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.total.toFixed(2)}</td>
+                      <td className="px-2 py-4 text-sm text-center text-[#0F172A]">{venta.id}</td>
+                      <td className="px-2 py-4 text-sm text-center text-[#0F172A]">{venta.cliente}</td>
+                      <td className="px-2 py-4 text-sm text-center text-[#0F172A]">{venta.dni}</td>
+                      <td className="px-2 py-4 text-sm text-center text-[#0F172A]">{venta.canal}</td>
+                      <td className="px-2 py-4 text-sm text-center text-[#0F172A]">{venta.metodo}</td>
+                      <td className="px-2 py-4 text-sm text-center text-[#0F172A]">
+                        {venta.total.toFixed(2)}
+                      </td>
 
-                      <td className="px-4 py-4 text-center">
+                      <td className="px-0 py-4 text-center">
                         <Button
                           size="small"
                           variant="white"
@@ -222,10 +221,10 @@ export default function VentasDashboard() {
                         </Button>
                       </td>
 
-                      <td className="px-4 py-4 text-center">
-                        <Button 
-                          size="small" 
-                          variant="whiteRed" 
+                      <td className="px-0 py-4 text-center">
+                        <Button
+                          size="small"
+                          variant="whiteRed"
                           onClick={() => handleDevolucion(venta)}
                           disabled={venta.productos.length === 0}
                         >
@@ -245,6 +244,10 @@ export default function VentasDashboard() {
               </tbody>
             </table>
           </div>
+
+
+          {/* SOLO Tbody con Scroll */}
+          
         </div>
 
         {/* Modal Detalle de Venta */}

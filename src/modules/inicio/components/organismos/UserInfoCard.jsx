@@ -3,6 +3,8 @@ import { DashboardCardHeader } from '../moleculas/DashboardCardHeader';
 import { Button } from '../../../../globals/components/atomos/Button';
 import FOTO from '../../../../assets/images/3d_avatar_21.png';
 
+import { useNavigate } from 'react-router-dom';
+
 // Campo de información con ancho ampliado
 const UserInfoField = ({ label, value }) => (
   <div className="border-2 border-primary-01 rounded-2xl p-3 mb-3 w-full max-w-[380px]">
@@ -12,6 +14,8 @@ const UserInfoField = ({ label, value }) => (
 );
 
 const UserInfoCard = ({buttonIcon, buttonIconPosition}) => {
+
+  const navigate = useNavigate();
   return (
     <DashboardCard>
       <DashboardCardHeader title="Información del Trabajador" />
@@ -43,7 +47,7 @@ const UserInfoCard = ({buttonIcon, buttonIconPosition}) => {
       
       {/* Botón */}
       <div className="mt-4">
-        <Button size="medium" variant="secondaryUNO" icon={buttonIcon} iconPosition={buttonIconPosition}>
+        <Button size="medium" variant="secondaryUNO" icon={buttonIcon} iconPosition={buttonIconPosition} onClick={() => navigate("/perfil")}>
           Ir a Perfil
         </Button>
       </div>

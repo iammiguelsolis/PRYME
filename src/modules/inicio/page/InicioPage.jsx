@@ -71,8 +71,8 @@ const InicioPage = () => {
           title="Últimos Ingresos de Inventario"
           headers={inventarioData.headers}
           data={inventarioData.data}
-          buttonText="Ir a Inventario"
-          linkTo="/inventario"
+          buttonText="Ir a Ingresos"
+          buttonHref="/inventario/ingreso"
           buttonIcon={<HiOutlineArchiveBox className="w-6 h-6"/>}
           buttonIconPosition="right"
         />
@@ -83,7 +83,7 @@ const InicioPage = () => {
           headers={ventasData.headers}
           data={ventasData.data}
           buttonText="Ir a Ventas"
-          linkTo="/ventas"
+          buttonHref="/ventas"
           buttonIcon={<HiOutlineTag className="w-6 h-6"/>}
           buttonIconPosition="right"
         />
@@ -94,7 +94,7 @@ const InicioPage = () => {
           headers={devolucionesData.headers}
           data={devolucionesData.data}
           buttonText="Ir a Ventas"
-          linkTo="/ventas"
+          buttonHref="/ventas"
           emptyMessage="No hay devoluciones registradas"
           buttonIcon={<HiOutlineTag className="w-6 h-6"/>}
           buttonIconPosition="right"

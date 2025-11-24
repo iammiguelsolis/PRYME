@@ -10,7 +10,6 @@ import {
   Tag
 } from 'lucide-react';
 
-import { Link } from "react-router-dom";
 import { Select } from '../components/atoms/Select';
 import { Modal } from '../components/molecules/Modal';
 import { InfoRow } from '../components/atoms/InfoRow';
@@ -26,7 +25,7 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FaInfoCircle } from "react-icons/fa";
 
 
-export default function InventarioDashboard() {
+export default function InventarioIngreso() {
   // Datos del contexto
   const { productos, ingresos } = useInventario();
 
@@ -144,226 +143,122 @@ export default function InventarioDashboard() {
     <main className="flex-grow p-6 bg-neutral-03">
       {/* Header principal */}
       <h1 className="text-l font-bold text-text-01 bg-neutral-01 rounded-4xl shadow-md p-2 px-4 flex flex-col mb-4">
-        Inventario
+        Inventario / Ingresos
       </h1>
 
       <div className="grid grid-cols-1 xl:grid-cols-1 gap-4">
-        {/* Columna izquierda: Buscar producto + Lista productos */}
+        
         <div className="space-y-4">
-          {/* BUSCAR PRODUCTO */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-primary-01 rounded-2xl p-6 shadow-md">
-              
-              <InventoryCardHeader title={"Buscar Producto"} color="white" />
-              <p className="text-xl text-blue-100 mb-5">
-                Filtra por modelo, color, talla y sucursal
-              </p>
+          {/* BUSCAR INGRESO */}
+          <div className="bg-primary-01 rounded-2xl p-6 shadow-md">
+            
+            <InventoryCardHeader title={"Buscar Ingreso"} color="white" />
+            <p className="text-xl text-blue-100 mb-5">
+              Filtra ingresos por proveedor, fecha, sucursal y tipo
+            </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-4xl mx-auto">
-                <Select
-                  placeholder="Modelo"
-                  options={[
-                    { value: 'nike', label: 'Nike' },
-                    { value: 'adidas', label: 'Adidas' },
-                    { value: 'nb', label: 'New Balance' }
-                  ]}
-                  value={filters.modelo}
-                  onChange={(e) => setFilters({ ...filters, modelo: e.target.value })}
-                />
-                <Select
-                  placeholder="Color"
-                  options={[
-                    { value: 'verde', label: 'Verde' },
-                    { value: 'negro', label: 'Negro' },
-                    { value: 'blanco', label: 'Blanco' },
-                    { value: 'gris', label: 'Gris' }
-                  ]}
-                  value={filters.color}
-                  onChange={(e) => setFilters({ ...filters, color: e.target.value })}
-                />
-                <Select
-                  placeholder="Talla"
-                  options={[
-                    { value: '39', label: '39' },
-                    { value: '40', label: '40' },
-                    { value: '41', label: '41' },
-                    { value: '42', label: '42' }
-                  ]}
-                  value={filters.talla}
-                  onChange={(e) => setFilters({ ...filters, talla: e.target.value })}
-                />
-                <Select
-                  placeholder="Sucursal"
-                  options={[{ value: 'lima', label: 'Lima Centro' }]}
-                  value={filters.sucursal}
-                  onChange={(e) => setFilters({ ...filters, sucursal: e.target.value })}
-                />
-              </div>
-
-              <div className="flex gap-3 justify-end mt-8">
-                <Button
-                  size="medium"
-                  variant="white"
-                  className="-mt-2 flex items-center gap-2"
-                  onClick={limpiarFiltrosProductos}
-                  icon={<MdFilterAltOff className="w-4 h-4" />}
-                  iconPosition="right"
-                >
-                  Limpiar filtros
-                </Button>
-                <Button
-                  size="medium"
-                  variant="white"
-                  className="-mt-2 flex items-center gap-2"
-                  icon={<FaSearch className="w-4 h-4" />}
-                  iconPosition="right"
-                >
-                  Buscar
-                </Button>
-              </div>
+            <div className="
+              grid
+              grid-cols-1
+              sm:grid-cols-2
+              xl:grid-cols-4
+              gap-8">
+              <Select
+                placeholder="Proveedor"
+                options={[
+                  { value: 'adidas', label: 'Adidas Perú' },
+                  { value: 'nike', label: 'Nike Perú' },
+                  { value: 'latam', label: 'Adidas Latam' }
+                ]}
+                value={filtersIngreso.proveedor}
+                onChange={(e) => setFiltersIngreso({ ...filtersIngreso, proveedor: e.target.value })}
+              />
+              <Select
+                placeholder="Fecha"
+                options={[
+                  { value: 'hoy', label: 'Hoy' },
+                  { value: 'semana', label: 'Esta semana' }
+                ]}
+                value={filtersIngreso.fecha}
+                onChange={(e) => setFiltersIngreso({ ...filtersIngreso, fecha: e.target.value })}
+              />
+              <Select
+                placeholder="Sucursal"
+                options={[{ value: 'lima', label: 'Lima Centro' }]}
+                value={filtersIngreso.sucursal}
+                onChange={(e) => setFiltersIngreso({ ...filtersIngreso, sucursal: e.target.value })}
+              />
+              <Select
+                placeholder="Tipo de ingreso"
+                options={[
+                  { value: 'compra', label: 'Compra' },
+                  { value: 'devolucion', label: 'Devolución' }
+                ]}
+                value={filtersIngreso.tipo}
+                onChange={(e) => setFiltersIngreso({ ...filtersIngreso, tipo: e.target.value })}
+              />
             </div>
 
-
-            <div className="bg-neutral-01 rounded-3xl shadow-md border border-neutral-02 p-4">
-              {/* Header: título + subtítulo + botón */}
-              <div className="flex items-center justify-between mb-3">
-                <InventoryCardHeader title="Ingresos recientes" className='flex-1 mr-3.5' />
-
-                <Link to="/inventario/ingreso">
-                  <Button
-                    size="medium"
-                    variant="secondaryUNO"
-                    iconPosition="right"
-                    className="flex items-center gap-2 m-2 whitespace-nowrap"
-                  >
-                    Ver todos los ingresos
+            <div className="flex flex-wrap justify-end gap-3 mt-8">
+              <Button
+                size="medium"
+                variant="white"
+                className="-mt-2 flex items-center gap-2"
+                onClick={limpiarFiltrosIngresos}
+                icon={<MdFilterAltOff className="w-4 h-4" />}
+                iconPosition="right"
+              >
+                Limpiar filtros
+              </Button>
+              <Button
+                size="medium"
+                variant="white"
+                className="-mt-2 flex items-center gap-2"
+                icon={<FaSearch className="w-4 h-4" />}
+                iconPosition="right"
+              >
+                Buscar
+              </Button>
+            </div>
+          </div>
+          {/* LISTA DE INGRESOS */}
+          <InventarioTableCard
+            title="Lista de ingresos"
+            subtitle={`Movimientos recientes de inventario · ${ingresosFiltrados.length} resultados`}
+            headers={ingresosHeaders}
+            items={ingresosFiltrados}
+            buttonText="Registrar ingreso"
+            linkTo="/inventario/registrarIngreso"
+            buttonIcon={<IoIosAddCircleOutline className="w-5 h-5" />}
+            buttonIconPosition="left"
+            emptyMessage="No se encontraron ingresos con los filtros seleccionados."
+            renderRow={(ing, index) => (
+              <tr
+                key={index}
+                className="border-b border-neutral-02 last:border-0 hover:bg-neutral-01/60 transition-colors"
+              >
+                <td className="px-3 py-2 text-sm text-center text-text-01">
+                  {ing.id}
+                </td>
+                <td className="px-3 py-2 text-sm text-center text-text-01">
+                  {ing.proveedor}
+                </td>
+                <td className="px-3 py-2 text-sm text-center text-text-01">
+                  {ing.producto}
+                </td>
+                <td className="px-3 py-2 text-sm text-center text-text-01">
+                  {ing.cantidad}
+                </td>
+                <td className="px-3 py-2 text-center">
+                  <Button 
+                    size="small" variant="white" icon={<FaInfoCircle  className="w-5 h-5"/>} iconPosition='right' onClick={()=>handleVerDetalleIngreso(ing)}>
+                    Ver detalle
                   </Button>
-                </Link>
-              </div>
-
-              {/* Tabla con scroll y header sticky */}
-              <div className="max-h-[180px] overflow-y-auto rounded-2xl">
-                <table className="w-full">
-                  <thead className="bg-[#1B8EF2] sticky top-0 z-10">
-                    <tr>
-                      <th className="px-2 py-3 text-xs font-medium text-white text-center">
-                        ID Ingreso
-                      </th>
-                      <th className="px-2 py-3 text-xs font-medium text-white text-center">
-                        Proveedor
-                      </th>
-                      <th className="px-2 py-3 text-xs font-medium text-white text-center">
-                        Total (S/.)
-                      </th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {ingresos.slice(0, 5).length > 0 ? (
-                      ingresos.slice(0, 5).map((ing, index) => (
-                        <tr
-                          key={index}
-                          className="border-b border-[#E4E7EE] hover:bg-gray-50 transition-colors"
-                        >
-                          <td className="px-2 py-3 text-sm text-center text-[#0F172A]">
-                            {ing.id}
-                          </td>
-                          <td className="px-2 py-3 text-sm text-center text-[#0F172A]">
-                            {ing.proveedor}
-                          </td>
-                          <td className="px-2 py-3 text-sm text-center text-[#0F172A]">
-                            S/.{" "}
-                            {ing.costoTotal.toLocaleString("es-PE", {
-                              minimumFractionDigits: 2,
-                            })}
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan={3}
-                          className="px-4 py-8 text-sm text-center text-gray-500"
-                        >
-                          No hay ingresos recientes para mostrar
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
-          {/* LISTA DE PRODUCTOS */}
-
-          <div className="bg-neutral-01 rounded-3xl shadow-md border border-neutral-02 p-4">
-            {/* Título + subtítulo, igual que en las otras cards */}
-            <div className='mx-0'>
-              <InventoryCardHeader title="Lista de productos" />
-            </div>
-
-            {/* Contenedor scrollable con header sticky (mismo estilo que la tabla de ventas) */}
-            <div className="max-h-[400px] overflow-y-auto rounded-2xl">
-              <table className="w-full">
-                <thead className="bg-[#1B8EF2] sticky top-0 z-10">
-                  <tr>
-                    <th className="px-2 py-3 text-xs font-medium text-white text-center">SKU</th>
-                    <th className="px-2 py-3 text-xs font-medium text-white text-center">Producto</th>
-                    <th className="px-2 py-3 text-xs font-medium text-white text-center">Color</th>
-                    <th className="px-2 py-3 text-xs font-medium text-white text-center">Talla</th>
-                    <th className="px-6 py-3 text-xs font-medium text-white text-center">Detalle</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {productosFiltrados.length > 0 ? (
-                    productosFiltrados.map((p, index) => (
-                      <tr
-                        key={index}
-                        className="border-b border-[#E4E7EE] hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="px-2 py-3 text-sm text-center text-[#0F172A]">
-                          {p.sku}
-                        </td>
-                        <td className="px-2 py-3 text-sm text-center text-[#0F172A]">
-                          {p.producto}
-                        </td>
-                        <td className="px-2 py-3 text-sm text-center text-[#0F172A]">
-                          {p.color}
-                        </td>
-                        <td className="px-2 py-3 text-sm text-center text-[#0F172A]">
-                          {p.talla}
-                        </td>
-                        <td className="px-2 py-3 text-center">
-                          <Button
-                            size="small"
-                            variant="white"
-                            icon={<FaInfoCircle className="w-5 h-5" />}
-                            iconPosition="right"
-                            onClick={() => handleVerDetalleProducto(p)}
-                          >
-                            Ver detalle
-                          </Button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan={5}
-                        className="px-4 py-8 text-sm text-center text-gray-500"
-                      >
-                        No se encontraron productos con los filtros seleccionados
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>        
+                </td>
+              </tr>
+            )}
+          />
+        </div>
       </div>
 
       {/* Modal Detalle de Producto */}

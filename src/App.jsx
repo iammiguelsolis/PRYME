@@ -7,6 +7,8 @@ import RegistrarIngresoPage from "./modules/inventario/page/RegistrarIngresoPage
 import Reportes from "./modules/reportes/pages/Reportes";
 import VentasDashboard from "./modules/ventasDashboard/page/VentasDashboard";
 import InventarioDashboard from "./modules/inventarioDashboard/page/InventarioDashboard";
+import InventarioIngreso from "./modules/inventarioIngreso/page/InventarioIngreso";
+import PerfilPage from "./modules/perfil/page/PerfilPage";
 
 // Importar los Providers
 import { InventarioProvider } from "./context/InventarioContext";
@@ -29,6 +31,8 @@ function App() {
               <Route path="/inventario/registrarIngreso" element={<RegistrarIngresoPage />} />
               <Route path='/reportes' element={<Reportes />} />
               <Route path='/ventas' element={<VentasDashboard />} />
+              <Route path='/inventario/ingreso' element={<InventarioIngreso />} />
+              <Route path='/perfil' element={<PerfilPage />} />
             </Route>
 
           </Routes>
