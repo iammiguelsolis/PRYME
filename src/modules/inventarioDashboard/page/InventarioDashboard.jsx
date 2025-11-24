@@ -85,7 +85,7 @@ export default function InventarioDashboard() {
           <div className="grid grid-cols-2 gap-8 max-w-7xl">
             
             {/* BUSCAR PRODUCTO */}
-            <div className="bg-gradient-to-b from-[#1B8EF2] to-[#1675F2] rounded-2xl p-6">
+            <div className="bg-primary-01 rounded-2xl p-6">
               <h2 className="text-white text-xl font-bold text-center mb-5">BUSCAR PRODUCTO</h2>
               <div className="space-y-3 max-w-md mx-auto">
                 <Select placeholder="Modelo" options={[{value:'nike',label:'Nike'},{value:'adidas',label:'Adidas'},{value:'nb',label:'New Balance'}]} value={filters.modelo} onChange={e => setFilters({...filters, modelo: e.target.value})} />
@@ -155,7 +155,7 @@ export default function InventarioDashboard() {
             </div>
 
             {/* BUSCAR INGRESO */}
-            <div className="bg-gradient-to-b from-[#1B8EF2] to-[#1675F2] rounded-2xl p-6">
+            <div className="bg-primary-01 rounded-2xl p-6">
               <h2 className="text-white text-xl font-bold text-center mb-5">BUSCAR INGRESO</h2>
               <div className="space-y-3 max-w-md mx-auto">
                 <Select placeholder="Proveedor" options={[{value:'adidas',label:'Adidas Peru'},{value:'nike',label:'Nike Peru'},{value:'latam',label:'Adidas Latam'}]} value={filtersIngreso.proveedor} onChange={e => setFiltersIngreso({...filtersIngreso, proveedor: e.target.value})} />
