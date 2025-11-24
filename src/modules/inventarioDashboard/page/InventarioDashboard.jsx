@@ -150,7 +150,7 @@ export default function InventarioDashboard() {
         {/* Columna izquierda: Buscar producto + Lista productos */}
         <div className="space-y-4">
           {/* BUSCAR PRODUCTO */}
-          <div className="bg-gradient-to-b from-[#1B8EF2] to-[#1675F2] rounded-2xl p-6 shadow-md">
+          <div className="bg-primary-01 rounded-2xl p-6 shadow-md">
             
             <InventoryCardHeader title={"Buscar Producto"} color="white" />
             <p className="text-xl text-blue-100 text-center mb-5">
@@ -267,7 +267,7 @@ export default function InventarioDashboard() {
         {/* Columna derecha: Buscar ingreso + Lista ingresos */}
         <div className="space-y-4">
           {/* BUSCAR INGRESO */}
-          <div className="bg-gradient-to-b from-[#1B8EF2] to-[#1675F2] rounded-2xl p-6 shadow-md">
+          <div className="bg-primary-01 rounded-2xl p-6 shadow-md">
             
 
             <InventoryCardHeader title={"Buscar Ingreso"} color="white" />
