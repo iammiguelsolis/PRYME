@@ -10,11 +10,11 @@ const COLOR_STYLES = {
   // agrega más variantes si las necesitas
 };
 
-export const InventoryCardHeader = ({ title, color = "primary-02", className = "" }) => {
+export const InventoryCardHeader = ({ title, color = "primary-02" }) => {
   const styles = COLOR_STYLES[color] || COLOR_STYLES["primary-02"];
 
   return (
-    <div className={`${styles.border} rounded-2xl p-3 mb-4 border-2 w-full ${className}`}>
+    <div className={`${styles.border} rounded-2xl p-3 mb-4 border-2 w-full`}>
       <h2 className={`text-3xl font-bold ${styles.text}`}>
         {title}
       </h2>

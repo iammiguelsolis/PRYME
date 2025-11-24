@@ -95,7 +95,7 @@ const RegistrarIngresoPage = () => {
     <div className="h-screen flex flex-col p-6 bg-neutral-03">
       {/* Breadcrumb */}
       <h1 className="text-l font-bold text-text-01 bg-neutral-01 rounded-4xl shadow-md p-2 px-4 flex flex-col mb-4">
-        Inventario / Registrar Ingreso
+        Inventario / Ingresos / Registrar Ingreso
       </h1>
 
       {/* Formulario info del ingreso */}

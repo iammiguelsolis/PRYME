@@ -2,9 +2,13 @@ import { DashboardCard } from '../atomos/DashboardCard';
 import { DashboardCardHeader } from '../moleculas/DashboardCardHeader';
 import { Button } from '../../../../globals/components/atomos/Button';
 
+import { useNavigate } from 'react-router-dom';
+
 import { FaInfoCircle } from "react-icons/fa";
 
 const DashboardTableCard = ({ title, headers, data, buttonText, buttonHref = "#", buttonIcon, buttonIconPosition }) => {
+  const navigate = useNavigate();
+
   return (
     <DashboardCard>
       <DashboardCardHeader title={title} />
@@ -47,6 +51,7 @@ const DashboardTableCard = ({ title, headers, data, buttonText, buttonHref = "#"
       <div className="mt-4">
         <Button 
           size="medium" variant="secondaryUNO" icon={buttonIcon} iconPosition={buttonIconPosition}
+          onClick={() => navigate(buttonHref)}
         >
           {buttonText}
         </Button>
