@@ -2,7 +2,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "../../../../globals/components/atomos/Button";
-import { DashboardCardHeader } from "../molecules/DashboardCardHeader";
+import { InventoryCardHeader } from "../molecules/InventoryCardHeader";
 
 const InventarioTableCard = ({
   title,              // string: "Lista de productos"
@@ -23,7 +23,7 @@ const InventarioTableCard = ({
       <div className=" flex items-center justify-center mb-3 space-x-4">
         
 
-        <DashboardCardHeader title={title} />
+        <InventoryCardHeader title={title} />
 
         {buttonText && linkTo && (
           <Link to={linkTo}>
