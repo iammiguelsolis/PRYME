@@ -17,7 +17,7 @@ import { Button } from '../../../globals/components/atomos/Button';
 import { useInventario } from '../../../context/InventarioContext';
 
 import InventarioTableCard from '../components/organismos/InventarioTableCard';
-import { DashboardCardHeader } from '../components/molecules/DashboardCardHeader';
+import { InventoryCardHeader } from '../components/molecules/InventoryCardHeader';
 
 import { MdFilterAltOff } from 'react-icons/md';
 import { FaSearch } from 'react-icons/fa';
@@ -152,7 +152,7 @@ export default function InventarioDashboard() {
           {/* BUSCAR PRODUCTO */}
           <div className="bg-gradient-to-b from-[#1B8EF2] to-[#1675F2] rounded-2xl p-6 shadow-md">
             
-            <DashboardCardHeader title={"Buscar Producto"} color="white" />
+            <InventoryCardHeader title={"Buscar Producto"} color="white" />
             <p className="text-xl text-blue-100 text-center mb-5">
               Filtra por modelo, color, talla y sucursal
             </p>
@@ -255,7 +255,7 @@ export default function InventarioDashboard() {
                 </td>
                 <td className="px-3 py-2 text-center">
                   <Button 
-                    size="small" variant="white" icon={<FaInfoCircle  className="w-5 h-5"/>} iconPosition='right' onClick={()=>handleVerDetalleIngreso(ing)}>
+                    size="small" variant="white" icon={<FaInfoCircle  className="w-5 h-5"/>} iconPosition='right' onClick={()=>handleVerDetalleProducto(p)}>
                     Ver detalle
                   </Button>
                 </td>
@@ -270,7 +270,7 @@ export default function InventarioDashboard() {
           <div className="bg-gradient-to-b from-[#1B8EF2] to-[#1675F2] rounded-2xl p-6 shadow-md">
             
 
-            <DashboardCardHeader title={"Buscar Ingreso"} color="white" />
+            <InventoryCardHeader title={"Buscar Ingreso"} color="white" />
             <p className="text-xl text-blue-100 text-center mb-5">
               Filtra ingresos por proveedor, fecha, sucursal y tipo
             </p>
