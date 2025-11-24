@@ -1,4 +1,8 @@
 import { Link } from "react-router-dom";
+import { HiOutlineChartBar } from 'react-icons/hi2';
+
+import { Button } from "../../../../globals/components/atomos/Button";
+
 
 export const StatCard = ({ icon: Icon, title, value }) => (
   <div className="flex gap-4 flex-col items-start justify-between bg-gradient-to-br from-[#1B8EF2] to-[#1675F2] rounded-2xl p-5 text-white w-[300px]">
@@ -11,11 +15,17 @@ export const StatCard = ({ icon: Icon, title, value }) => (
 
     <p className="text-3xl font-bold mb-4">{value}</p>
 
-    <Link
-      to="/reportes"
-      className="px-4 py-1.5 bg-white text-[#0F172A] rounded-3xl text-sm font-medium hover:bg-gray-100 transition-all"
+
+    <Button 
+      size="small"
+      variant="white"
+      icon={<HiOutlineChartBar  className="w-5 h-5"/>}
+      iconPosition='right'
     >
-      Ir a Reportes
-    </Link>
+      <Link to="/reportes" className="text-blue">
+        Ir a Reportes
+      </Link>
+      
+    </Button>
   </div>
 );

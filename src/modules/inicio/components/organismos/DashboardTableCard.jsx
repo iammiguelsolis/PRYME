@@ -2,7 +2,9 @@ import { DashboardCard } from '../atomos/DashboardCard';
 import { DashboardCardHeader } from '../moleculas/DashboardCardHeader';
 import { Button } from '../../../../globals/components/atomos/Button';
 
-const DashboardTableCard = ({ title, headers, data, buttonText, buttonHref = "#" }) => {
+import { FaInfoCircle } from "react-icons/fa";
+
+const DashboardTableCard = ({ title, headers, data, buttonText, buttonHref = "#", buttonIcon, buttonIconPosition }) => {
   return (
     <DashboardCard>
       <DashboardCardHeader title={title} />
@@ -29,7 +31,7 @@ const DashboardTableCard = ({ title, headers, data, buttonText, buttonHref = "#"
                 
                 <td>
                   <Button 
-                    size="small" variant="white"
+                    size="small" variant="white" icon={<FaInfoCircle  className="w-5 h-5"/>} iconPosition='right'
                   >
                     Ver detalle
                   </Button>
@@ -44,7 +46,7 @@ const DashboardTableCard = ({ title, headers, data, buttonText, buttonHref = "#"
       
       <div className="mt-4">
         <Button 
-          size="medium" variant="secondaryUNO"
+          size="medium" variant="secondaryUNO" icon={buttonIcon} iconPosition={buttonIconPosition}
         >
           {buttonText}
         </Button>
