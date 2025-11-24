@@ -164,6 +164,8 @@ export default function VentasDashboard() {
 
         {/* Lista de Ventas */}
         <div className="bg-white rounded-xl border border-[#E4E7EE] shadow-sm overflow-hidden max-h-[800px]">
+
+          {/* Header */}
           <div className="p-5 flex items-center justify-between">
             <div className='w-full pr-6'>
               <DashboardCardHeader title="Lista de Ventas"/>
@@ -177,9 +179,10 @@ export default function VentasDashboard() {
               Registrar Venta <Plus size={18} />
             </Button>
           </div>
-          
+
+          {/* Tabla */}
           <table className="w-full">
-            <thead className="bg-[#1B8EF2]">
+            <thead className="bg-[#1B8EF2] sticky top-0 z-10">
               <tr>
                 <th className="px-4 py-3 text-xs font-medium text-white text-center">ID Venta</th>
                 <th className="px-4 py-3 text-xs font-medium text-white text-center">Nombre Cliente</th>
@@ -191,49 +194,57 @@ export default function VentasDashboard() {
                 <th className="px-4 py-3 text-xs font-medium text-white text-center">Accion</th>
               </tr>
             </thead>
-            <tbody>
-              {ventasFiltradas.length > 0 ? (
-                ventasFiltradas.map((venta) => (
-                  <tr key={venta.id} className="border-b border-[#E4E7EE]">
-                    <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.id}</td>
-                    <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.cliente}</td>
-                    <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.dni}</td>
-                    <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.canal}</td>
-                    <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.metodo}</td>
-                    <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.total.toFixed(2)}</td>
-                    <td className="px-4 py-4 text-center">
-                      <Button
-                        size="small"
-                        variant="white"
-                        onClick={() => handleVerDetalle(venta)}
-                        icon={<FaInfoCircle className="w-5 h-5" />}
-                        iconPosition="right"
-                      >
-                        Ver Detalle
-                      </Button>
-                    </td>
-                    <td className="px-4 py-4 text-center">
-                      <Button 
-                        size="small" 
-                        variant="whiteRed" 
-                        onClick={() => handleDevolucion(venta)}
-                        disabled={venta.productos.length === 0}
-                      >
-                        Devolución
-                        <HiOutlineTrash className="w-5 h-5" />
-                      </Button>
+          </table>
+
+          {/* SOLO Tbody con Scroll */}
+          <div className="max-h-[600px] overflow-y-auto">
+            <table className="w-full">
+              <tbody>
+                {ventasFiltradas.length > 0 ? (
+                  ventasFiltradas.map((venta) => (
+                    <tr key={venta.id} className="border-b border-[#E4E7EE]">
+                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.id}</td>
+                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.cliente}</td>
+                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.dni}</td>
+                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.canal}</td>
+                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.metodo}</td>
+                      <td className="px-4 py-4 text-sm text-center text-[#0F172A]">{venta.total.toFixed(2)}</td>
+
+                      <td className="px-4 py-4 text-center">
+                        <Button
+                          size="small"
+                          variant="white"
+                          onClick={() => handleVerDetalle(venta)}
+                          icon={<FaInfoCircle className="w-5 h-5" />}
+                          iconPosition="right"
+                        >
+                          Ver Detalle
+                        </Button>
+                      </td>
+
+                      <td className="px-4 py-4 text-center">
+                        <Button 
+                          size="small" 
+                          variant="whiteRed" 
+                          onClick={() => handleDevolucion(venta)}
+                          disabled={venta.productos.length === 0}
+                        >
+                          Devolución
+                          <HiOutlineTrash className="w-5 h-5" />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
+                      No se encontraron ventas con los filtros aplicados
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="8" className="px-4 py-8 text-center text-gray-500">
-                    No se encontraron ventas con los filtros aplicados
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* Modal Detalle de Venta */}
