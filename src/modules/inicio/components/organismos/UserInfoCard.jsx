@@ -11,7 +11,7 @@ const UserInfoField = ({ label, value }) => (
   </div>
 );
 
-const UserInfoCard = () => {
+const UserInfoCard = ({buttonIcon, buttonIconPosition}) => {
   return (
     <DashboardCard>
       <DashboardCardHeader title="Información del Trabajador" />
@@ -43,7 +43,7 @@ const UserInfoCard = () => {
       
       {/* Botón */}
       <div className="mt-4">
-        <Button size="medium" variant="secondaryUNO">
+        <Button size="medium" variant="secondaryUNO" icon={buttonIcon} iconPosition={buttonIconPosition}>
           Ir a Perfil
         </Button>
       </div>

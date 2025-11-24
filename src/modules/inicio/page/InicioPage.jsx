@@ -3,6 +3,13 @@ import DashboardTableCard from "../components/organismos/DashboardTableCard";
 import UserInfoCard from "../components/organismos/UserInfoCard";
 import { useInventario } from "../../../context/InventarioContext";
 import { useVentas } from "../../../context/VentasContext";
+import { BoxIcon } from "lucide-react";
+import { 
+  HiOutlineHome, 
+  HiOutlineArchiveBox, 
+  HiOutlineTag, 
+  HiOutlineUser, 
+} from 'react-icons/hi2';
 
 const InicioPage = () => {
   const { ingresos } = useInventario();
@@ -54,7 +61,10 @@ const InicioPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         
         {/* Fila 1, Col 1 */}
-        <UserInfoCard />
+        <UserInfoCard 
+          buttonIcon={<HiOutlineUser className="w-6 h-6"/>}
+          buttonIconPosition="right"
+        />
         
         {/* Fila 1, Col 2 */}
         <DashboardTableCard 
@@ -63,6 +73,8 @@ const InicioPage = () => {
           data={inventarioData.data}
           buttonText="Ir a Inventario"
           linkTo="/inventario"
+          buttonIcon={<HiOutlineArchiveBox className="w-6 h-6"/>}
+          buttonIconPosition="right"
         />
         
         {/* Fila 2, Col 1 */}
@@ -72,6 +84,8 @@ const InicioPage = () => {
           data={ventasData.data}
           buttonText="Ir a Ventas"
           linkTo="/ventas"
+          buttonIcon={<HiOutlineTag className="w-6 h-6"/>}
+          buttonIconPosition="right"
         />
         
         {/* Fila 2, Col 2 */}
@@ -82,6 +96,8 @@ const InicioPage = () => {
           buttonText="Ir a Ventas"
           linkTo="/ventas"
           emptyMessage="No hay devoluciones registradas"
+          buttonIcon={<HiOutlineTag className="w-6 h-6"/>}
+          buttonIconPosition="right"
         />
         
       </div>
