@@ -24,6 +24,8 @@ import {
 import { useVentas } from "../../../context/VentasContext";
 import { useInventario } from "../../../context/InventarioContext";
 
+import { Button } from "../../../globals/components/atomos/Button";
+
 const COLORS = {
   primary: '#1B8EF2',
   secondary: '#22A2F2',
@@ -34,7 +36,7 @@ const COLORS = {
 };
 
 const KpiCard = ({ icon: Icon, title, value, change }) => (
-  <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+  <div title={title} className="bg-white rounded-lg shadow-md p-4 border border-gray-200 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
     <div className="flex items-center justify-between mb-2">
       <Icon className="w-8 h-8" style={{ color: COLORS.primary }} />
       {change && (
@@ -76,19 +78,19 @@ const ResumenCard = ({ ventas }) => {
         <h3 className="text-xl font-bold">Resumen General de Ventas</h3>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
+        <div title="Total de Ventas" className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
           <p className="text-sm text-blue-100 mb-1 font-semibold">Total de Ventas</p>
           <p className="text-3xl font-bold">{resumen.totalVentas}</p>
         </div>
-        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
+        <div title="Ingreso Total" className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
           <p className="text-sm text-blue-100 mb-1 font-semibold">Ingreso Total</p>
           <p className="text-3xl font-bold">S/ {resumen.ingresoTotal.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
         </div>
-        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
+        <div title="Promedio por Venta" className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
           <p className="text-sm text-blue-100 mb-1 font-semibold">Promedio por Venta</p>
           <p className="text-3xl font-bold">S/ {resumen.promedioVenta.toLocaleString('es-PE', { minimumFractionDigits: 2 })}</p>
         </div>
-        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
+        <div title="Productos Vendidos" className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/20 transition-colors duration-300">
           <p className="text-sm text-blue-100 mb-1 font-semibold">Productos Vendidos</p>
           <p className="text-3xl font-bold">{resumen.productosVendidos}</p>
         </div>
@@ -189,14 +191,16 @@ const Reportes = () => {
           <h1 className="text-l flex-1 mr-4 font-bold text-text-01 bg-neutral-01 rounded-4xl shadow-md p-2 px-4 flex flex-col mb-4">
             Reportes
           </h1>
-          <button
+          <Button 
+            type="button"
+            variant="primary"
+            size="medium"
+            icon={<HiOutlineArrowUpOnSquare className="w-6 h-6" />}
+            className=" flex items-center gap-2 -mt-4"
             onClick={() => setIsExportOpen(true)}
-            className="flex items-center gap-2 text-white font-semibold -mt-4 px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
-            style={{ backgroundColor: COLORS.primary }}
           >
-            <HiOutlineArrowUpOnSquare className="w-5 h-5" />
             Exportar
-          </button>
+          </Button>
         </div>
 
         {/* KPIs */}

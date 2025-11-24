@@ -8,12 +8,13 @@ import { InfoRow } from '../components/molecules/InfoRow';
 import { Checkbox } from '../components/atoms/Checkbox';
 import { SuccessModal } from '../components/organisms/SuccessModal';
 import { Plus, Trash2, MessageSquare, Phone, User, CreditCard, MapPin, Edit3, Hash, Banknote, TrendingUp } from 'lucide-react';
-import { HiOutlineTrash } from 'react-icons/hi2';
+import { HiOutlineTrash, HiPlus } from 'react-icons/hi2';
 import { DashboardCardHeader } from '../../inicio/components/moleculas/DashboardCardHeader';
 import { Button } from '../../../globals/components/atomos/Button';
 import { useNavigate } from "react-router-dom";
 import { useVentas } from '../../../context/VentasContext';
 import { FaInfoCircle } from "react-icons/fa";
+
 
 
 export default function VentasDashboard() {
@@ -109,24 +110,28 @@ export default function VentasDashboard() {
             </div>
             <div className="grid grid-cols-3 gap-x-6 gap-y-4">
               <Input 
+                title='ID Venta'
                 label="ID Venta" 
                 placeholder="ID Venta" 
                 value={filters.id} 
                 onChange={e => setFilters({...filters, id: e.target.value})} 
               />
               <Input 
+                title='Nombre Cliente'
                 label="Nombre Cliente" 
                 placeholder="Nombre Cliente" 
                 value={filters.nombre} 
                 onChange={e => setFilters({...filters, nombre: e.target.value})} 
               />
               <Input 
+                title='Doc. Identidad'
                 label="Doc. Identidad" 
                 placeholder="DNI / RUC" 
                 value={filters.doc} 
                 onChange={e => setFilters({...filters, doc: e.target.value})} 
               />
-              <Select 
+              <Select
+                title='Canal' 
                 label="Canal" 
                 options={[
                   {value:'', label:'Todos'},
@@ -137,6 +142,7 @@ export default function VentasDashboard() {
                 onChange={e => setFilters({...filters, canal: e.target.value})} 
               />
               <Select 
+                title='Sucursal'
                 label="Sucursal" 
                 options={[
                   {value:'', label:'Todas'},
@@ -147,6 +153,7 @@ export default function VentasDashboard() {
                 onChange={e => setFilters({...filters, sucursal: e.target.value})}
               />
               <Select 
+                title='Metodo de Pago'
                 label="Metodo de Pago" 
                 options={[
                   {value:'', label:'Todos'},
@@ -175,8 +182,9 @@ export default function VentasDashboard() {
               variant="secondaryUNO"
               className="-mt-4 flex items-center justify-between gap-2 whitespace-nowrap "
               onClick={() => navigate("/ventas/registrar")}
+              icon={<HiPlus className='h-6 w-6'></HiPlus>}
             >
-              Registrar Venta <Plus size={18} />
+              Registrar Venta
             </Button>
           </div>
 
@@ -227,9 +235,10 @@ export default function VentasDashboard() {
                           variant="whiteRed"
                           onClick={() => handleDevolucion(venta)}
                           disabled={venta.productos.length === 0}
+                          icon={<HiOutlineTrash className='w-5 h-5'></HiOutlineTrash>}
+                          iconPosition='right'
                         >
                           Devolución
-                          <HiOutlineTrash className="w-5 h-5" />
                         </Button>
                       </td>
                     </tr>

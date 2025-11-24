@@ -1,5 +1,5 @@
-export const Input = ({ label, placeholder, value, onChange, disabled = false }) => (
-  <div className="flex flex-col gap-1">
+export const Input = ({ title='', label, placeholder, value, onChange, disabled = false }) => (
+  <div title={title} className="flex flex-col gap-1">
     {label && <label className="text-xs text-[#0F172A]">{label}</label>}
     <input
       type="text"

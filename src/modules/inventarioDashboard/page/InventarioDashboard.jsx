@@ -161,6 +161,7 @@ export default function InventarioDashboard() {
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-4xl mx-auto">
                 <Select
+                  title="Modelo"
                   placeholder="Modelo"
                   options={[
                     { value: 'nike', label: 'Nike' },
@@ -171,6 +172,7 @@ export default function InventarioDashboard() {
                   onChange={(e) => setFilters({ ...filters, modelo: e.target.value })}
                 />
                 <Select
+                  title="Color"
                   placeholder="Color"
                   options={[
                     { value: 'verde', label: 'Verde' },
@@ -182,6 +184,7 @@ export default function InventarioDashboard() {
                   onChange={(e) => setFilters({ ...filters, color: e.target.value })}
                 />
                 <Select
+                  title="Talla"
                   placeholder="Talla"
                   options={[
                     { value: '39', label: '39' },
@@ -193,6 +196,7 @@ export default function InventarioDashboard() {
                   onChange={(e) => setFilters({ ...filters, talla: e.target.value })}
                 />
                 <Select
+                  title="Sucursal"
                   placeholder="Sucursal"
                   options={[{ value: 'lima', label: 'Lima Centro' }]}
                   value={filters.sucursal}

@@ -73,6 +73,7 @@ export const Button = ({
   
   return (
     <button
+      title={children}
       type={type}
       onClick={onClick}
       disabled={disabled || loading}

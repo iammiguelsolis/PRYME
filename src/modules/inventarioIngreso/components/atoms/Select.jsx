@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 
-export const Select = ({ placeholder, options, value, onChange }) => (
-  <div className="relative">
+export const Select = ({ title='', placeholder, options, value, onChange }) => (
+  <div title={title} className="relative">
     <select 
       value={value} 
       onChange={onChange}

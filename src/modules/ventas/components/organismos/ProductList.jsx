@@ -12,8 +12,8 @@ export const ProductList = ({ productos, onAddProductClick, onRemoveProduct }) =
         onClick={onAddProductClick} 
         size="medium" 
         variant="secondaryUNO"
+        icon={<HiPlus className="w-6 h-6"></HiPlus>}
       >
-        <HiPlus className="w-5 h-5 mr-2" />
         Añadir Producto
       </Button>
     </div>

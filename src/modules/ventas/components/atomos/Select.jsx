@@ -1,8 +1,8 @@
 import { HiChevronDown } from 'react-icons/hi2';
 
-export const Select = ({ id, name, value, onChange, children }) => {
+export const Select = ({ title='', id, name, value, onChange, children }) => {
   return (
-    <div className="relative w-full">
+    <div title={title} className="relative w-full">
       <select
         id={id}
         name={name}
