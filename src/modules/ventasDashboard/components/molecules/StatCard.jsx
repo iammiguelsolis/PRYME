@@ -5,7 +5,7 @@ import { Button } from "../../../../globals/components/atomos/Button";
 
 
 export const StatCard = ({ icon: Icon, title, value }) => (
-  <div className="flex gap-4 flex-col items-start justify-between bg-gradient-to-br from-[#1B8EF2] to-[#1675F2] rounded-2xl p-5 text-white w-[300px]">
+  <div className="flex gap-4 flex-col items-start justify-between bg-primary-02 rounded-2xl p-5 text-white w-[300px]">
     <div className="flex items-center gap-4 mb-2">
       <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center">
         <Icon size={30} className="opacity-90" />

@@ -163,7 +163,7 @@ export default function VentasDashboard() {
         </div>
 
         {/* Lista de Ventas */}
-        <div className="bg-white rounded-xl border border-[#E4E7EE] shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl border border-[#E4E7EE] shadow-sm overflow-hidden max-h-[800px]">
           <div className="p-5 flex items-center justify-between">
             <div className='w-full pr-6'>
               <DashboardCardHeader title="Lista de Ventas"/>

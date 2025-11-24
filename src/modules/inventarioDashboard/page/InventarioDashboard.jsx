@@ -157,7 +157,7 @@ export default function InventarioDashboard() {
               Filtra por modelo, color, talla y sucursal
             </p>
 
-            <div className="space-y-3 max-w-md mx-auto">
+<div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-4xl mx-auto">
               <Select
                 placeholder="Modelo"
                 options={[
@@ -166,9 +166,7 @@ export default function InventarioDashboard() {
                   { value: 'nb', label: 'New Balance' }
                 ]}
                 value={filters.modelo}
-                onChange={(e) =>
-                  setFilters({ ...filters, modelo: e.target.value })
-                }
+                onChange={(e) => setFilters({ ...filters, modelo: e.target.value })}
               />
               <Select
                 placeholder="Color"
@@ -179,9 +177,7 @@ export default function InventarioDashboard() {
                   { value: 'gris', label: 'Gris' }
                 ]}
                 value={filters.color}
-                onChange={(e) =>
-                  setFilters({ ...filters, color: e.target.value })
-                }
+                onChange={(e) => setFilters({ ...filters, color: e.target.value })}
               />
               <Select
                 placeholder="Talla"
@@ -192,17 +188,13 @@ export default function InventarioDashboard() {
                   { value: '42', label: '42' }
                 ]}
                 value={filters.talla}
-                onChange={(e) =>
-                  setFilters({ ...filters, talla: e.target.value })
-                }
+                onChange={(e) => setFilters({ ...filters, talla: e.target.value })}
               />
               <Select
                 placeholder="Sucursal"
                 options={[{ value: 'lima', label: 'Lima Centro' }]}
                 value={filters.sucursal}
-                onChange={(e) =>
-                  setFilters({ ...filters, sucursal: e.target.value })
-                }
+                onChange={(e) => setFilters({ ...filters, sucursal: e.target.value })}
               />
             </div>
 
@@ -275,62 +267,42 @@ export default function InventarioDashboard() {
               Filtra ingresos por proveedor, fecha, sucursal y tipo
             </p>
 
-            <div className="space-y-3 max-w-md mx-auto">
-              <Select
-                placeholder="Proveedor"
-                options={[
-                  { value: 'adidas', label: 'Adidas Perú' },
-                  { value: 'nike', label: 'Nike Perú' },
-                  { value: 'latam', label: 'Adidas Latam' }
-                ]}
-                value={filtersIngreso.proveedor}
-                onChange={(e) =>
-                  setFiltersIngreso({
-                    ...filtersIngreso,
-                    proveedor: e.target.value
-                  })
-                }
-              />
-              <Select
-                placeholder="Fecha"
-                options={[
-                  { value: 'hoy', label: 'Hoy' },
-                  { value: 'semana', label: 'Esta semana' }
-                ]}
-                value={filtersIngreso.fecha}
-                onChange={(e) =>
-                  setFiltersIngreso({
-                    ...filtersIngreso,
-                    fecha: e.target.value
-                  })
-                }
-              />
-              <Select
-                placeholder="Sucursal"
-                options={[{ value: 'lima', label: 'Lima Centro' }]}
-                value={filtersIngreso.sucursal}
-                onChange={(e) =>
-                  setFiltersIngreso({
-                    ...filtersIngreso,
-                    sucursal: e.target.value
-                  })
-                }
-              />
-              <Select
-                placeholder="Tipo de ingreso"
-                options={[
-                  { value: 'compra', label: 'Compra' },
-                  { value: 'devolucion', label: 'Devolución' }
-                ]}
-                value={filtersIngreso.tipo}
-                onChange={(e) =>
-                  setFiltersIngreso({
-                    ...filtersIngreso,
-                    tipo: e.target.value
-                  })
-                }
-              />
-            </div>
+          <div className="grid grid-cols-4 gap-2 max-w-2xl mx-auto">
+            <Select
+              placeholder="Proveedor"
+              options={[
+                { value: 'adidas', label: 'Adidas Perú' },
+                { value: 'nike', label: 'Nike Perú' },
+                { value: 'latam', label: 'Adidas Latam' }
+              ]}
+              value={filtersIngreso.proveedor}
+              onChange={(e) => setFiltersIngreso({ ...filtersIngreso, proveedor: e.target.value })}
+            />
+            <Select
+              placeholder="Fecha"
+              options={[
+                { value: 'hoy', label: 'Hoy' },
+                { value: 'semana', label: 'Esta semana' }
+              ]}
+              value={filtersIngreso.fecha}
+              onChange={(e) => setFiltersIngreso({ ...filtersIngreso, fecha: e.target.value })}
+            />
+            <Select
+              placeholder="Sucursal"
+              options={[{ value: 'lima', label: 'Lima Centro' }]}
+              value={filtersIngreso.sucursal}
+              onChange={(e) => setFiltersIngreso({ ...filtersIngreso, sucursal: e.target.value })}
+            />
+            <Select
+              placeholder="Tipo de ingreso"
+              options={[
+                { value: 'compra', label: 'Compra' },
+                { value: 'devolucion', label: 'Devolución' }
+              ]}
+              value={filtersIngreso.tipo}
+              onChange={(e) => setFiltersIngreso({ ...filtersIngreso, tipo: e.target.value })}
+            />
+          </div>
 
             <div className="flex flex-wrap gap-3 justify-center mt-8">
               <Button
