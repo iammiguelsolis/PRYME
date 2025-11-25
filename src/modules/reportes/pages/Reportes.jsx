@@ -23,7 +23,7 @@ import {
 } from "recharts";
 import { useVentas } from "../../../context/VentasContext";
 import { useInventario } from "../../../context/InventarioContext";
-
+import { ExportReportModal } from "../components/organismos/ExportReportModal";
 import { Button } from "../../../globals/components/atomos/Button";
 
 const COLORS = {
@@ -360,32 +360,7 @@ const Reportes = () => {
 
         {/* Modal de Exportar */}
         {isExportOpen && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
-            <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full animate-fade-in-scale">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Exportar Reporte</h2>
-              <div className="space-y-3">
-                <button 
-                  className="w-full text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
-                  style={{ backgroundColor: COLORS.primary }}
-                >
-                  Exportar como PDF
-                </button>
-                <button 
-                  className="w-full text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
-                  style={{ backgroundColor: COLORS.success }}
-                >
-                  Exportar como Excel
-                </button>
-                <button 
-                  onClick={() => setIsExportOpen(false)}
-                  className="w-full font-semibold py-3 rounded-lg transition-all duration-300 hover:shadow-lg"
-                  style={{ backgroundColor: '#BEC2C9', color: '#0F172A' }}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          </div>
+          <ExportReportModal isOpen={isExportOpen} onClose={() => setIsExportOpen(false)} />
         )}
       </div>
     </div>
