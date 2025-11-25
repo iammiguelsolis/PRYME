@@ -13,7 +13,7 @@ export const VideoTutorialModal = ({ isOpen, onClose, tutorial }) => {
     <>
       {/* Overlay */}
       <div 
-        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300 ${
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity duration-300 h-full ${
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         }`}
         onClick={onClose}
