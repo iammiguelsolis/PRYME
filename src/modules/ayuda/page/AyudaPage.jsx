@@ -30,8 +30,7 @@ const AyudaPage = () => {
   };
 
   const handleContactChat = () => {
-    // En producción, aquí abrirías un widget de chat en vivo
-    alert('📞 Chat en vivo próximamente disponible.\n\nPor ahora, puedes contactarnos por:\n\n📧 Email: soporte@pryme.com\n📱 Teléfono: +51 999 999 999');
+    
   };
 
   return (

@@ -122,7 +122,6 @@ export const ExportReportModal = ({ isOpen, onClose }) => {
 
     // En una app real, aquí usarías una librería como jsPDF
     console.log(resumen);
-    alert("📄 PDF generado (ver consola para detalles)");
   };
 
   // Simular exportación a Excel
@@ -152,18 +151,15 @@ export const ExportReportModal = ({ isOpen, onClose }) => {
 
     // En una app real, aquí usarías una librería como xlsx
     console.log(csv);
-    alert("📊 Excel generado (ver consola para detalles)");
   };
 
   const handleExport = () => {
     // Validaciones
     if (formatos.length === 0) {
-      alert("⚠️ Por favor selecciona al menos un formato");
       return;
     }
 
     if (informacion.length === 0) {
-      alert("⚠️ Por favor selecciona al menos un tipo de información");
       return;
     }
 
@@ -184,7 +180,6 @@ export const ExportReportModal = ({ isOpen, onClose }) => {
     const infoTexto = informacion.join(", ");
     const mesTexto = mes ? ` del mes ${mes}` : "";
     
-    alert(`✅ Reporte exportado exitosamente!\n\nFormato: ${formatosTexto}\nInformación: ${infoTexto}${mesTexto}\n\n(Revisa la consola para ver los detalles)`);
     
     // Resetear y cerrar
     setFormatos([]);

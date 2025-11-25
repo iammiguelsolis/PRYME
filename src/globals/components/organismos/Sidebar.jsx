@@ -6,7 +6,8 @@ import {
   HiOutlineArchiveBox, 
   HiOutlineTag, 
   HiOutlineChartBar,
-  HiOutlineQuestionMarkCircle, 
+  HiOutlineQuestionMarkCircle,
+  HiOutlineArchiveBoxArrowDown, 
   HiOutlineUser,          // 👈 nuevo icono
 } from 'react-icons/hi2';
 
@@ -52,7 +53,7 @@ export const Sidebar = () => {
 
           <li onClick={() => navigate('/inventario/registrarIngreso')}>
             <SidebarLink
-              icon={HiOutlineArchiveBox}
+              icon={HiOutlineArchiveBoxArrowDown }
               isActive={isActive('/inventario/registrarIngreso')}
             >
               Registrar Ingreso

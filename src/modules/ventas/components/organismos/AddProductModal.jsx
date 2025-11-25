@@ -23,7 +23,6 @@ export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
     e.preventDefault();
 
     if (!formData.modelo || !formData.cantidad || !formData.color || !formData.talla || !formData.precioUnitario) {
-      alert('Por favor complete todos los campos');
       return;
     }
 
@@ -31,12 +30,10 @@ export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
     const precioNum = Number(formData.precioUnitario);
 
     if (cantidadNum <= 0) {
-      alert('La cantidad debe ser al menos 1');
       return;
     }
 
     if (precioNum < 0) {
-      alert('El precio no puede ser negativo');
       return;
     }
 

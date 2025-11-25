@@ -28,7 +28,6 @@ export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
       !formData.talla ||
       !formData.costoUnitario
     ) {
-      alert('Por favor complete todos los campos');
       return;
     }
 
@@ -37,12 +36,10 @@ export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
 
     // Validación lógica adicional
     if (Number.isNaN(cantidadNum) || cantidadNum <= 0) {
-      alert('La cantidad debe ser al menos 1');
       return;
     }
 
     if (Number.isNaN(costoNum) || costoNum < 0) {
-      alert('El costo unitario no puede ser negativo');
       return;
     }
 
