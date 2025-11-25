@@ -1,6 +1,4 @@
-import { Tooltip } from "recharts";
-
-const SidebarLink = ({ children, icon, isActive = false, onClick }) => {
+const SidebarLink = ({ children, icon, isActive = false, onClick, isCollapsed = false }) => {
   const IconComponent = icon;
 
   const baseClasses =
@@ -11,9 +9,13 @@ const SidebarLink = ({ children, icon, isActive = false, onClick }) => {
     : "text-text-02 hover:bg-neutral-03/60";
 
   return (
-    <div title={`${children === "Inventario" ? "Inventario (Productos e Ingresos)" : children}`} onClick={onClick} className={`${baseClasses} ${activeClasses}` }>
-      <IconComponent className="w-6 h-6 mr-3" />
-      <span>{children}</span>
+    <div 
+      title={isCollapsed ? (children === "Inventario" ? "Inventario (Productos e Ingresos)" : children) : ""} 
+      onClick={onClick} 
+      className={`${baseClasses} ${activeClasses} ${isCollapsed ? 'justify-center px-2' : ''}`}
+    >
+      <IconComponent className={`${isCollapsed ? 'w-7 h-7' : 'w-6 h-6'} ${isCollapsed ? '' : 'mr-3'} flex-shrink-0`} />
+      {!isCollapsed && <span>{children}</span>}
     </div>
   );
 };

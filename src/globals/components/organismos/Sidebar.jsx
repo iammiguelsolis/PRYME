@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import PRYME from '../../../assets/PRYME_fondoBlanco.svg';
+import PRYMEPQUEÑO from '../../../assets/LOGO_fondoBlanco.svg';
 
 import { 
   HiOutlineHome, 
@@ -8,24 +10,54 @@ import {
   HiOutlineChartBar,
   HiOutlineQuestionMarkCircle,
   HiOutlineArchiveBoxArrowDown, 
-  HiOutlineUser,          // 👈 nuevo icono
+  HiOutlineUser,
+  HiChevronLeft,
+  HiChevronRight,
 } from 'react-icons/hi2';
 
 import SidebarLink from '../moleculas/SidebarLink';
+import { IoAccessibilityOutline } from 'react-icons/io5';
 
 export const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const isActive = (path) => {
     return location.pathname.startsWith(path);
   };
 
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
   return (
-    <aside className="w-64 h-screen bg-neutral-01 p-4 flex flex-col shadow-lg">
+    <aside 
+      className={`${
+        isCollapsed ? 'w-20' : 'w-64'
+      } h-screen bg-neutral-01 p-4 flex flex-col shadow-lg transition-all duration-300 relative`}
+    >
       
-      <div title='PRYME' className="mb-2">
-        <img src={PRYME} alt="PRYME" width={150} />
+      {/* Botón para colapsar/expandir */}
+      <button
+        onClick={toggleSidebar}
+        className="absolute -right-3 top-8 bg-neutral-01 border-2 border-neutral-02 rounded-full p-1 hover:bg-neutral-02 transition-colors z-10"
+        aria-label={isCollapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
+      >
+        {isCollapsed ? (
+          <HiChevronRight className="w-5 h-5 text-text-01" />
+        ) : (
+          <HiChevronLeft className="w-5 h-5 text-text-01" />
+        )}
+      </button>
+
+      {/* Logo */}
+      <div title='PRYME' className="mb-2 flex justify-center">
+        <img 
+          src={isCollapsed ? PRYMEPQUEÑO : PRYME} 
+          alt="PRYME" 
+          className={isCollapsed ? 'w-10' : 'w-[150px]'}
+        />
       </div>
 
       <hr className="border-text-02 border-2 mb-4" />
@@ -37,8 +69,9 @@ export const Sidebar = () => {
             <SidebarLink
               icon={HiOutlineHome}
               isActive={isActive('/inicio')}
+              isCollapsed={isCollapsed}
             >
-              Inicio
+              {!isCollapsed && 'Inicio'}
             </SidebarLink>
           </li>
 
@@ -46,17 +79,19 @@ export const Sidebar = () => {
             <SidebarLink
               icon={HiOutlineArchiveBox}
               isActive={isActive('/inventario') && !isActive('/inventario/registrarIngreso')}
+              isCollapsed={isCollapsed}
             >
-              Inventario
+              {!isCollapsed && 'Inventario'}
             </SidebarLink>
           </li>
 
           <li onClick={() => navigate('/inventario/registrarIngreso')}>
             <SidebarLink
-              icon={HiOutlineArchiveBoxArrowDown }
+              icon={HiOutlineArchiveBoxArrowDown}
               isActive={isActive('/inventario/registrarIngreso')}
+              isCollapsed={isCollapsed}
             >
-              Registrar Ingreso
+              {!isCollapsed && 'Registrar Ingreso'}
             </SidebarLink>
           </li>
 
@@ -64,8 +99,9 @@ export const Sidebar = () => {
             <SidebarLink
               icon={HiOutlineTag}
               isActive={isActive('/ventas')}
+              isCollapsed={isCollapsed}
             >
-              Ventas
+              {!isCollapsed && 'Ventas'}
             </SidebarLink>
           </li>
 
@@ -73,8 +109,19 @@ export const Sidebar = () => {
             <SidebarLink
               icon={HiOutlineChartBar}
               isActive={isActive('/reportes')}
+              isCollapsed={isCollapsed}
             >
-              Reportes
+              {!isCollapsed && 'Reportes'}
+            </SidebarLink>
+          </li>
+
+          <li onClick={() => navigate('/clientes')}>
+            <SidebarLink
+              icon={IoAccessibilityOutline}
+              isActive={isActive('/clientes')}
+              isCollapsed={isCollapsed}
+            >
+              {!isCollapsed && 'Clientes'}
             </SidebarLink>
           </li>
 
@@ -82,8 +129,9 @@ export const Sidebar = () => {
             <SidebarLink
               icon={HiOutlineQuestionMarkCircle}
               isActive={isActive('/ayuda')}
+              isCollapsed={isCollapsed}
             >
-              Ayuda
+              {!isCollapsed && 'Ayuda'}
             </SidebarLink>
           </li>
 
@@ -99,8 +147,9 @@ export const Sidebar = () => {
           <SidebarLink
             icon={HiOutlineUser}
             isActive={isActive('/perfil')}
+            isCollapsed={isCollapsed}
           >
-            Mi perfil
+            {!isCollapsed && 'Mi perfil'}
           </SidebarLink>
         </div>
       </div>

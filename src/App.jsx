@@ -14,6 +14,7 @@ import AyudaPage from "./modules/ayuda/page/AyudaPage";
 // Importar los Providers
 import { InventarioProvider } from "./context/InventarioContext";
 import { VentasProvider } from "./context/VentasContext";
+import ClientesModule from "./modules/clientes/ClientesModule";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               <Route path='/inventario/ingreso' element={<InventarioIngreso />} />
               <Route path='/perfil' element={<PerfilPage />} />
               <Route path='/ayuda' element={<AyudaPage />} />
+              <Route path='/clientes' element={<ClientesModule />} />
             </Route>
 
           </Routes>
