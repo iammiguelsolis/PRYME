@@ -44,9 +44,18 @@ export const Sidebar = () => {
           <li onClick={() => navigate('/inventario')}>
             <SidebarLink
               icon={HiOutlineArchiveBox}
-              isActive={isActive('/inventario')}
+              isActive={isActive('/inventario') && !isActive('/inventario/registrarIngreso')}
             >
               Inventario
+            </SidebarLink>
+          </li>
+
+          <li onClick={() => navigate('/inventario/registrarIngreso')}>
+            <SidebarLink
+              icon={HiOutlineArchiveBox}
+              isActive={isActive('/inventario/registrarIngreso')}
+            >
+              Registrar Ingreso
             </SidebarLink>
           </li>
 
