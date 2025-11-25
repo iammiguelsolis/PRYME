@@ -13,7 +13,7 @@ const DashboardTableCard = ({
   buttonIcon,
   buttonIconPosition,
   emptyMessage = "No hay registros para mostrar",
-  onDetailClick,          // 👈 NUEVO
+  onDetailClick,   // 👈 callback para “Ver detalle”
 }) => {
   const navigate = useNavigate();
 
@@ -25,8 +25,8 @@ const DashboardTableCard = ({
         <table className="w-full border border-primary-01 rounded-xl overflow-hidden">
           <thead className="bg-primary-01 text-text-03">
             <tr>
-              {headers.map(header => (
-                <th key={header} className="p-3 font-semibold text-center">
+              {headers.map((header) => (
+                <th key={header} className="p-3 text-center font-semibold">
                   {header}
                 </th>
               ))}
@@ -35,27 +35,27 @@ const DashboardTableCard = ({
           </thead>
           
           <tbody>
-            {data.length > 0 ? (
+            {data && data.length > 0 ? (
               data.map((row, index) => (
                 <tr
                   key={index}
-                  className="border-b border-neutral-03 text-text-02 text-center"
+                  className="border-b border-neutral-03 text-text-02"
                 >
                   {row.map((cell, i) => (
-                    <td key={i} className="p-1">
+                    <td key={i} className="p-2 text-center">
                       {cell}
                     </td>
                   ))}
-                  
-                  <td className="p-2">
-                    <Button 
+
+                  <td className="p-2 text-center">
+                    <Button
                       size="small"
                       variant="white"
                       icon={<FaInfoCircle className="w-5 h-5" />}
                       iconPosition="right"
                       onClick={() => {
                         if (onDetailClick) {
-                          onDetailClick(row, index);   // 👈 le pasas la fila al padre
+                          onDetailClick(row, index); // 👈 devolvemos la fila a Inicio
                         }
                       }}
                     >
@@ -77,11 +77,12 @@ const DashboardTableCard = ({
           </tbody>
         </table>
       </div>
-      
+
       <div className="flex-grow" />
-      
+
+      {/* El botón de abajo sigue navegando al módulo completo si lo deseas */}
       <div className="mt-4">
-        <Button 
+        <Button
           size="medium"
           variant="secondaryUNO"
           icon={buttonIcon}
