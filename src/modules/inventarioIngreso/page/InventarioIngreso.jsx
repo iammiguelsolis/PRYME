@@ -13,8 +13,8 @@ import {
 import { useSearchParams } from "react-router-dom";
 
 import { Select } from '../components/atoms/Select';
-import { Modal } from '../components/molecules/Modal';
-import { InfoRow } from '../components/atoms/InfoRow';
+import { Modal } from "../../ventasDashboard/components/organisms/Modal";
+import { InfoRow } from "../../ventasDashboard/components/molecules/InfoRow";
 import { Button } from '../../../globals/components/atomos/Button';
 import { useInventario } from '../../../context/InventarioContext';
 
@@ -448,6 +448,7 @@ export default function InventarioIngreso() {
         isOpen={showIngresoDetail}
         onClose={() => setShowIngresoDetail(false)}
         title="Detalle de Ingreso"
+        width='max-w-xl'
       >
         {selectedIngreso && (
           <div className="space-y-5">
