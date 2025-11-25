@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { SectionTitle } from '../components/molecules/SectionTitle';
 import { Input } from '../components/atoms/Input';
 import { Select } from '../components/atoms/Select';
@@ -11,7 +11,7 @@ import { Plus, Trash2, MessageSquare, Phone, User, CreditCard, MapPin, Edit3, Ha
 import { HiOutlineTrash, HiPlus } from 'react-icons/hi2';
 import { DashboardCardHeader } from '../../inicio/components/moleculas/DashboardCardHeader';
 import { Button } from '../../../globals/components/atomos/Button';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useVentas } from '../../../context/VentasContext';
 import { FaInfoCircle } from "react-icons/fa";
 
@@ -37,6 +37,19 @@ export default function VentasDashboard() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const ventaIdParam = searchParams.get('ventaId');
+
+  useEffect(() => {
+    if (ventaIdParam && ventas.length > 0) {
+      const venta = ventas.find(v => String(v.id) === String(ventaIdParam));
+      if (venta) {
+        setSelectedSale(venta);
+        setShowDetail(true);   // 👈 abre el modal de Detalle
+      }
+    }
+  }, [ventaIdParam, ventas]);
 
   // Filtrar ventas según los filtros aplicados
   const ventasFiltradas = useMemo(() => {
