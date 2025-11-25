@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Phone,
   Package,
@@ -9,6 +9,8 @@ import {
   User,
   Tag
 } from 'lucide-react';
+
+import { useSearchParams } from "react-router-dom";
 
 import { Select } from '../components/atoms/Select';
 import { Modal } from '../components/molecules/Modal';
@@ -35,6 +37,20 @@ export default function InventarioIngreso() {
   const [showIngresoDetail, setShowIngresoDetail] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedIngreso, setSelectedIngreso] = useState(null);
+
+  const [searchParams] = useSearchParams();
+  const ingresoIdParam = searchParams.get('ingresoId');
+
+  useEffect(() => {
+    if (ingresoIdParam && ingresos.length > 0) {
+      const ingreso = ingresos.find(ing => String(ing.id) === String(ingresoIdParam));
+      if (ingreso) {
+        setSelectedIngreso(ingreso);
+        setShowIngresoDetail(true);  // 👈 abre el modal de Detalle de Ingreso
+      }
+    }
+  }, [ingresoIdParam, ingresos]);
+
 
   const [filters, setFilters] = useState({
     modelo: '',

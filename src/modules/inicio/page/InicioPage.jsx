@@ -1,11 +1,10 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import DashboardTableCard from "../components/organismos/DashboardTableCard";
 import UserInfoCard from "../components/organismos/UserInfoCard";
 import { useInventario } from "../../../context/InventarioContext";
 import { useVentas } from "../../../context/VentasContext";
-import { BoxIcon } from "lucide-react";
 import { 
-  HiOutlineHome, 
   HiOutlineArchiveBox, 
   HiOutlineTag, 
   HiOutlineUser, 
@@ -14,30 +13,30 @@ import {
 const InicioPage = () => {
   const { ingresos } = useInventario();
   const { ventas } = useVentas();
+  const navigate = useNavigate();
 
-  // Transformar datos de ingresos para la tabla
+  // Ingresos
   const inventarioData = useMemo(() => ({
     headers: ["ID Ingreso", "Total (S/.)", "N° Productos"],
     data: ingresos.slice(0, 5).map(ingreso => [
       ingreso.id,
       ingreso.costoTotal.toLocaleString('es-PE', { minimumFractionDigits: 2 }),
-      ingreso.cantidad
+      ingreso.cantidad,
     ])
   }), [ingresos]);
 
-  // Transformar datos de ventas para la tabla
+  // Ventas
   const ventasData = useMemo(() => ({
     headers: ["ID Venta", "Total (S/.)", "N° Productos"],
     data: ventas.slice(0, 5).map(venta => [
       venta.id,
       venta.total.toLocaleString('es-PE', { minimumFractionDigits: 2 }),
-      venta.productos.reduce((sum, p) => sum + p.cantidad, 0)
+      venta.productos.reduce((sum, p) => sum + p.cantidad, 0),
     ])
   }), [ventas]);
 
-  // Filtrar ventas con devoluciones (productos que fueron removidos)
+  // Devoluciones
   const devolucionesData = useMemo(() => {
-    // Buscar ventas que tienen menos productos o total menor al subtotal original
     const ventasConDevoluciones = ventas.filter(v => 
       v.productos.length === 0 || v.total < v.subtotal - v.descuento
     );
@@ -47,10 +46,26 @@ const InicioPage = () => {
       data: ventasConDevoluciones.slice(0, 5).map(venta => [
         venta.id,
         venta.cliente,
-        `S/. ${(venta.subtotal - venta.total - venta.descuento).toLocaleString('es-PE', { minimumFractionDigits: 2 })}`
+        `S/. ${(venta.subtotal - venta.total - venta.descuento).toLocaleString('es-PE', { minimumFractionDigits: 2 })}`,
       ])
     };
   }, [ventas]);
+
+  // Handlers de "Ver detalle"
+  const handleDetalleIngreso = (row) => {
+    const id = row[0]; // primera columna = ID
+    navigate(`/inventario/ingreso?ingresoId=${id}`);
+  };
+
+  const handleDetalleVenta = (row) => {
+    const id = row[0];
+    navigate(`/ventas?ventaId=${id}`);
+  };
+
+  const handleDetalleDevolucion = (row) => {
+    const id = row[0];
+    navigate(`/ventas?ventaId=${id}`); // o ruta específica si tienes una
+  };
 
   return (
     <main className="flex-grow p-6 bg-neutral-03">
@@ -62,7 +77,7 @@ const InicioPage = () => {
         
         {/* Fila 1, Col 1 */}
         <UserInfoCard 
-          buttonIcon={<HiOutlineUser className="w-6 h-6"/>}
+          buttonIcon={<HiOutlineUser className="w-6 h-6" />}
           buttonIconPosition="right"
         />
         
@@ -73,8 +88,9 @@ const InicioPage = () => {
           data={inventarioData.data}
           buttonText="Ir a Ingresos"
           buttonHref="/inventario/ingreso"
-          buttonIcon={<HiOutlineArchiveBox className="w-6 h-6"/>}
+          buttonIcon={<HiOutlineArchiveBox className="w-6 h-6" />}
           buttonIconPosition="right"
+          onDetailClick={handleDetalleIngreso}
         />
         
         {/* Fila 2, Col 1 */}
@@ -84,8 +100,9 @@ const InicioPage = () => {
           data={ventasData.data}
           buttonText="Ir a Ventas"
           buttonHref="/ventas"
-          buttonIcon={<HiOutlineTag className="w-6 h-6"/>}
+          buttonIcon={<HiOutlineTag className="w-6 h-6" />}
           buttonIconPosition="right"
+          onDetailClick={handleDetalleVenta}
         />
         
         {/* Fila 2, Col 2 */}
@@ -96,8 +113,9 @@ const InicioPage = () => {
           buttonText="Ir a Ventas"
           buttonHref="/ventas"
           emptyMessage="No hay devoluciones registradas"
-          buttonIcon={<HiOutlineTag className="w-6 h-6"/>}
+          buttonIcon={<HiOutlineTag className="w-6 h-6" />}
           buttonIconPosition="right"
+          onDetailClick={handleDetalleDevolucion}
         />
         
       </div>

@@ -5,7 +5,8 @@ import {
   HiOutlineHome, 
   HiOutlineArchiveBox, 
   HiOutlineTag, 
-  HiOutlineChartBar 
+  HiOutlineChartBar,
+  HiOutlineUser,          // 👈 nuevo icono
 } from 'react-icons/hi2';
 
 import SidebarLink from '../moleculas/SidebarLink';
@@ -14,7 +15,6 @@ export const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Determinar qué link está activo basado en la URL actual
   const isActive = (path) => {
     return location.pathname.startsWith(path);
   };
@@ -70,7 +70,20 @@ export const Sidebar = () => {
         </ul>
       </nav>
 
-      <div className="flex-grow"></div>
+      {/* Empuja el resto hacia abajo */}
+      <div className="flex-grow" />
+
+      {/* Zona inferior: Perfil */}
+      <div className="pt-3 border-t border-neutral-02 mt-3">
+        <div onClick={() => navigate('/perfil')}>
+          <SidebarLink
+            icon={HiOutlineUser}
+            isActive={isActive('/perfil')}
+          >
+            Mi perfil
+          </SidebarLink>
+        </div>
+      </div>
     </aside>
   );
 };
