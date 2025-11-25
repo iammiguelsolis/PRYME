@@ -9,6 +9,7 @@ import VentasDashboard from "./modules/ventasDashboard/page/VentasDashboard";
 import InventarioDashboard from "./modules/inventarioDashboard/page/InventarioDashboard";
 import InventarioIngreso from "./modules/inventarioIngreso/page/InventarioIngreso";
 import PerfilPage from "./modules/perfil/page/PerfilPage";
+import AyudaPage from "./modules/ayuda/page/AyudaPage";
 
 // Importar los Providers
 import { InventarioProvider } from "./context/InventarioContext";
@@ -33,6 +34,7 @@ function App() {
               <Route path='/ventas' element={<VentasDashboard />} />
               <Route path='/inventario/ingreso' element={<InventarioIngreso />} />
               <Route path='/perfil' element={<PerfilPage />} />
+              <Route path='/ayuda' element={<AyudaPage />} />
             </Route>
 
           </Routes>
