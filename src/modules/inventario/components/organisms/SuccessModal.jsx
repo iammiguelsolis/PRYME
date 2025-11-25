@@ -2,14 +2,35 @@ import { Button } from "../../../../globals/components/atomos/Button";
 import { HiCheckCircle } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 
-export const SuccessModal = ({ isOpen, onClose, onRegisterAnother }) => {
+export const SuccessModal = ({
+  title = "Ingreso Registrado con Éxito",
+  isOpen,
+  onClose,
+  onRegisterAnother,
+}) => {
   const navigate = useNavigate();
 
   if (!isOpen) return null;
 
-  const handleBack = () => {
-    onClose();
-    navigate("/inventario");
+  const isIngreso = title === "Ingreso Registrado con Éxito";
+
+  // Botón principal (izquierda)
+  const handlePrimary = () => {
+    if (onRegisterAnother) {
+      onRegisterAnother();   // la función ya decide qué hacer (limpiar o abrir modal)
+    }
+  };
+
+  // Botón secundario (derecha)
+  const handleSecondary = () => {
+    if (isIngreso) {
+      // Caso ingreso: volver a Inventario
+      onClose();
+      navigate("/inventario");
+    } else {
+      // Caso producto: solo cerrar el modal
+      onClose();
+    }
   };
 
   return (
@@ -19,24 +40,24 @@ export const SuccessModal = ({ isOpen, onClose, onRegisterAnother }) => {
         <HiCheckCircle className="w-24 h-24 text-primary-01 mx-auto mb-4" />
 
         <h2 className="text-xl font-semibold text-neutral-900 mb-6">
-          Ingreso Registrado con Éxito
+          {title}
         </h2>
 
         <div className="flex gap-4 justify-center">
           <Button
             size="medium"
             variant="white"
-            onClick={onRegisterAnother}
+            onClick={handlePrimary}
           >
-            Registrar otro Ingreso
+            {isIngreso ? "Registrar otro ingreso" : "Añadir otro producto"}
           </Button>
 
           <Button
             size="medium"
             variant="secondaryUNO"
-            onClick={handleBack}
+            onClick={handleSecondary}
           >
-            Volver
+            {isIngreso ? "Volver" : "Continuar"}
           </Button>
         </div>
       </div>

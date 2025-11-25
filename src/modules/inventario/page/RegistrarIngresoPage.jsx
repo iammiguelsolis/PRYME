@@ -13,18 +13,22 @@ const RegistrarIngresoPage = () => {
   const { registrarIngreso } = useInventario();
 
   // Estados para modales
+  const [isSuccessProductOpen, setSuccessProductOpen] = useState(false);
+
+
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isSuccessModalOpen, setSuccessModalOpen] = useState(false); // <-- Nombre corregido
   const [nuevoIngresoId, setNuevoIngresoId] = useState(null);
 
   // Estado del formulario de ingreso
-  const [datosIngreso, setDatosIngreso] = useState({
+  const initialIngresoState = {
     proveedor: '',
     telefono: '',
     tipo: 'compra',
     sucursal: 'lima',
     fecha: new Date().toISOString().split('T')[0],
-  });
+  };
+  const [datosIngreso, setDatosIngreso] = useState(initialIngresoState);
 
   // Lista de lotes/productos a ingresar
   const [lotes, setLotes] = useState([]);
@@ -39,8 +43,11 @@ const RegistrarIngresoPage = () => {
       cantidad: nuevoProducto.cantidad,
       costoUnitario: nuevoProducto.costoUnitario,
     }]);
+
     setAddModalOpen(false);
+    setSuccessProductOpen(true);   // 👈 para mostrar el modal de éxito de producto
   };
+
 
   // Eliminar producto del lote
   const handleRemoveProduct = (id) => {
@@ -74,22 +81,25 @@ const RegistrarIngresoPage = () => {
 
   // Después del éxito
   const handleSuccessClose = () => {
-    setSuccessModalOpen(false); // <-- CORREGIDO
-    // Limpiar formulario
-    setLotes([]);
-    setDatosIngreso({
-      proveedor: '',
-      telefono: '',
-      tipo: 'compra',
-      sucursal: 'lima',
-      fecha: new Date().toISOString().split('T')[0],
-    });
+    setSuccessModalOpen(false);
+    setLotes([]);              // aquí sí tiene sentido limpiar
+    setDatosIngreso(initialIngresoState);
+  };
+
+  const handleSuccessProductClose = () => {
+    setSuccessProductOpen(false);   // solo cerrar el modal
+  };
+
+  const handleAddOtherProduct = () => {
+    setSuccessProductOpen(false);   // cierro el modal de éxito
+    setAddModalOpen(true);          // vuelvo a abrir el modal de agregar producto
   };
 
   const handleVolverAInventario = () => {
     setSuccessModalOpen(false); // <-- CORREGIDO
     navigate('/inventario');
   };
+
 
   return (
     <div className="h-screen flex flex-col p-6 bg-neutral-03">
@@ -126,14 +136,23 @@ const RegistrarIngresoPage = () => {
         onAdd={handleAddProduct}
       />
 
-      {/* Modal Éxito */}
+      {/* Producto añadido */}
+      {/* Modal éxito al añadir producto */}
       <SuccessModal
-        isOpen={isSuccessModalOpen} // <-- Usa el estado correcto
-        onClose={handleSuccessClose}
-        ingresoId={nuevoIngresoId}
-        onRegisterAnother={handleSuccessClose}
-        onGoToInventario={handleVolverAInventario}
+        title="Producto añadido con éxito"
+        isOpen={isSuccessProductOpen}
+        onClose={handleSuccessProductClose}
+        onRegisterAnother={handleAddOtherProduct}
       />
+
+      {/* Modal éxito al registrar ingreso */}
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={handleSuccessClose}
+        onRegisterAnother={handleSuccessClose}
+      />
+
+
     </div>
   );
 };

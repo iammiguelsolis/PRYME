@@ -17,7 +17,7 @@ export const SuccessModal = ({
       <div className="flex flex-col items-center justify-center text-center">
         <HiCheckCircle className="w-24 h-24 text-primary-01" />
         
-        <h2 className="text-2xl font-bold text-text-01 mt-4 mb-2">
+        <h2 className="text-xl font-semibold text-text-01 mt-4 mb-2">
           {title}
         </h2>
 
@@ -26,10 +26,10 @@ export const SuccessModal = ({
         )}
         
         <div className="flex space-x-4 mt-4">
-          <Button size="medium" variant="complementary" onClick={onPrimaryAction}>
+          <Button size="medium" variant="white" onClick={onPrimaryAction}>
             {primaryActionText}
           </Button>
-          <Button size="medium" variant="complementary" onClick={onSecondaryAction}>
+          <Button size="medium" variant="secondaryUNO" onClick={onSecondaryAction}>
             {secondaryActionText}
           </Button>
         </div>
