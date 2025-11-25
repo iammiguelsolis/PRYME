@@ -1,6 +1,16 @@
 import { HiChevronDown } from 'react-icons/hi2';
 
-export const Select = ({ title='', id, name, value, onChange, children }) => {
+export const Select = ({
+  title = '',
+  id,
+  name,
+  value,
+  onChange,
+  children,
+  error = false,        // 👈 nuevo prop
+  disabled = false,     // 👈 opcional
+  className = '',       // 👈 opcional por si quieres extender estilos
+}) => {
   return (
     <div title={title} className="relative w-full">
       <select
@@ -8,7 +18,15 @@ export const Select = ({ title='', id, name, value, onChange, children }) => {
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full appearance-none px-3 py-2 border border-neutral-02 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-01 text-text-02"
+        disabled={disabled}
+        className={`
+          w-full appearance-none px-3 py-2 rounded-2xl shadow-sm 
+          focus:outline-none focus:ring-2 text-text-02 
+          ${error
+            ? 'border border-red-500 focus:ring-red-500'
+            : 'border border-neutral-02 focus:ring-primary-01'}
+          ${className}
+        `}
       >
         {children}
       </select>

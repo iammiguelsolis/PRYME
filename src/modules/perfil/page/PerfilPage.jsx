@@ -1,7 +1,22 @@
 import { useState, useEffect } from "react";
-import { User, Mail, Phone, Building2, Shield, Lock, Key, Save, Edit2, UserCircle2, Briefcase } from "lucide-react";
+import { SuccessModal } from "../components/organismos/SuccessModal";
+import {
+  User,
+  Mail,
+  Phone,
+  Building2,
+  Shield,
+  Lock,
+  Key,
+  Save,
+  Edit2,
+  UserCircle2,
+  Briefcase,
+} from "lucide-react";
 
-// Mock Components
+// =========================
+//  Mock Components
+// =========================
 const ProfileAvatar = ({ name }) => {
   const initials = name
     .split(" ")
@@ -9,7 +24,7 @@ const ProfileAvatar = ({ name }) => {
     .join("")
     .toUpperCase()
     .slice(0, 2);
-  
+
   return (
     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1B8EF2] to-[#0554F2] flex items-center justify-center text-white text-2xl font-bold shadow-lg">
       {initials || "U"}
@@ -17,18 +32,25 @@ const ProfileAvatar = ({ name }) => {
   );
 };
 
-const Button = ({ children, type = "button", variant = "primary", size = "medium", onClick }) => {
-  const baseStyles = "font-medium rounded-xl transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md";
-  
+const Button = ({
+  children,
+  type = "button",
+  variant = "primary",
+  size = "medium",
+  onClick,
+}) => {
+  const baseStyles =
+    "font-medium rounded-xl transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md";
+
   const variants = {
     primary: "bg-[#1B8EF2] hover:bg-[#1675F2] text-white",
     secondary: "bg-[#0554F2] hover:bg-[#22A2F2] text-white",
   };
-  
+
   const sizes = {
     medium: "px-6 py-2.5 text-sm",
   };
-  
+
   return (
     <button
       type={type}
@@ -40,7 +62,15 @@ const Button = ({ children, type = "button", variant = "primary", size = "medium
   );
 };
 
-const ProfileField = ({ label, name, type = "text", value, onChange, placeholder, icon: Icon }) => {
+const ProfileField = ({
+  label,
+  name,
+  type = "text",
+  value,
+  onChange,
+  placeholder,
+  icon: Icon,
+}) => {
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium text-[#334155] flex items-center gap-2">
@@ -59,8 +89,10 @@ const ProfileField = ({ label, name, type = "text", value, onChange, placeholder
   );
 };
 
-// Profile Info Card
-const ProfileInfoCard = ({ user = {} }) => {
+// =========================
+//  Profile Info Card
+// =========================
+const ProfileInfoCard = ({ user = {}, onProfileSaved }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [form, setForm] = useState({
     nombre: "",
@@ -91,6 +123,11 @@ const ProfileInfoCard = ({ user = {} }) => {
     e.preventDefault();
     console.log("Guardar perfil:", form);
     setIsEditing(false);
+
+    // 👇 Aquí disparamos el modal del padre
+    if (onProfileSaved) {
+      onProfileSaved();
+    }
   };
 
   return (
@@ -99,7 +136,7 @@ const ProfileInfoCard = ({ user = {} }) => {
       <div className="bg-gradient-to-r from-[#1B8EF2] to-[#0554F2] p-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
         <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
-        
+
         <div className="relative flex items-start justify-between">
           <div className="flex items-center gap-6">
             <ProfileAvatar name={`${form.nombre} ${form.apellido}`} />
@@ -121,7 +158,7 @@ const ProfileInfoCard = ({ user = {} }) => {
               )}
             </div>
           </div>
-          
+
           <button
             onClick={() => setIsEditing(!isEditing)}
             className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 rounded-xl transition-all flex items-center gap-2"
@@ -138,7 +175,7 @@ const ProfileInfoCard = ({ user = {} }) => {
           <UserCircle2 className="w-5 h-5 text-[#1B8EF2]" />
           Información Personal
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ProfileField
             label="Nombre"
@@ -204,8 +241,10 @@ const ProfileInfoCard = ({ user = {} }) => {
   );
 };
 
-// Profile Security Card
-const ProfileSecurityCard = ({ user = {} }) => {
+// =========================
+//  Profile Security Card
+// =========================
+const ProfileSecurityCard = ({ user = {}, onSecurityUpdated }) => {
   const [form, setForm] = useState({
     email: "",
     currentPassword: "",
@@ -228,6 +267,10 @@ const ProfileSecurityCard = ({ user = {} }) => {
   const handleUpdate = (e) => {
     e.preventDefault();
     console.log("Actualizar seguridad:", form);
+
+    if (onSecurityUpdated) {
+      onSecurityUpdated();
+    }
   };
 
   return (
@@ -237,7 +280,9 @@ const ProfileSecurityCard = ({ user = {} }) => {
           <Shield className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-[#0F172A]">Seguridad y cuenta</h3>
+          <h3 className="text-lg font-semibold text-[#0F172A]">
+            Seguridad y cuenta
+          </h3>
           <p className="text-xs text-[#334155]">Actualiza tus credenciales</p>
         </div>
       </div>
@@ -256,9 +301,11 @@ const ProfileSecurityCard = ({ user = {} }) => {
         <div className="pt-4 border-t border-[#E4E7EE]">
           <div className="flex items-center gap-2 mb-5">
             <Lock className="w-4 h-4 text-[#1B8EF2]" />
-            <span className="text-sm font-medium text-[#334155]">Cambiar contraseña</span>
+            <span className="text-sm font-medium text-[#334155]">
+              Cambiar contraseña
+            </span>
           </div>
-          
+
           <div className="space-y-4">
             <ProfileField
               label="Contraseña actual"
@@ -303,7 +350,9 @@ const ProfileSecurityCard = ({ user = {} }) => {
   );
 };
 
-// Main Page Component
+// =========================
+//  Main Page Component
+// =========================
 const PerfilPage = () => {
   const mockUser = {
     nombre: "Nombre",
@@ -312,6 +361,16 @@ const PerfilPage = () => {
     email: "usuario@pryme.com",
     telefono: "987654321",
     sucursal: "Lima Centro",
+  };
+
+  const [isSuccessProductOpen, setIsSuccessProductOpen] = useState(false);
+
+  const handleOpenSuccessModal = () => {
+    setIsSuccessProductOpen(true);
+  };
+
+  const handleSuccessProductClose = () => {
+    setIsSuccessProductOpen(false);
   };
 
   return (
@@ -325,14 +384,27 @@ const PerfilPage = () => {
         {/* Bento Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <ProfileInfoCard user={mockUser} />
+            <ProfileInfoCard
+              user={mockUser}
+              onProfileSaved={handleOpenSuccessModal}
+            />
           </div>
-          
+
           <div className="lg:col-span-1">
-            <ProfileSecurityCard user={mockUser} />
+            <ProfileSecurityCard
+              user={mockUser}
+              onSecurityUpdated={handleOpenSuccessModal}
+            />
           </div>
         </div>
       </div>
+
+      <SuccessModal
+        title="Cambios Guardados con Éxito"
+        isOpen={isSuccessProductOpen}
+        onClose={handleSuccessProductClose}
+        onRegisterAnother={handleSuccessProductClose}
+      />
     </main>
   );
 };

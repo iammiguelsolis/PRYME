@@ -66,12 +66,15 @@ export const BatchList = ({ lotes, onAddProductClick, onRemoveProduct }) => {
                   <td className="py-3 px-3 text-center">S/. {lote.costoUnitario.toFixed(2)}</td>
                   <td className="py-3 px-3 text-center">S/. {(lote.cantidad * lote.costoUnitario).toFixed(2)}</td>
                   <td className="py-3 px-3 flex items-center justify-center gap-2">
-                    <button
-                      className="text-red-500 hover:text-red-700"
+                    
+                    <Button
+                      size="small"
+                      variant="whiteRed"
+                      icon={<HiOutlineTrash className="w-5 h-5"></HiOutlineTrash>}
                       onClick={() => onRemoveProduct(lote.id)}
                     >
-                      <HiOutlineTrash className="w-5 h-5" />
-                    </button>
+                      Eliminar
+                    </Button>
                   </td>
                 </tr>
               ))

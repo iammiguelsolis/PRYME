@@ -4,7 +4,7 @@ import ProfileField from "../moleculas/ProfileField";
 import { Button } from "../../../../globals/components/atomos/Button";
 import { InventoryCardHeader } from "../moleculas/InventoryCardHeader";
 
-const ProfileInfoCard = ({ user = {}, className = "" }) => {
+const ProfileInfoCard = ({ user = {}, onProfileSaved, className = "" }) => {
   const [form, setForm] = useState({
     nombre: "",
     apellido: "",
@@ -37,9 +37,10 @@ const ProfileInfoCard = ({ user = {}, className = "" }) => {
 
   const handleSave = (e) => {
     e.preventDefault();
-    // Aquí luego puedes conectar con tu endpoint o contexto
     console.log("Guardar perfil:", form);
+    if (onProfileSaved) onProfileSaved();
   };
+
 
   return (
     <div

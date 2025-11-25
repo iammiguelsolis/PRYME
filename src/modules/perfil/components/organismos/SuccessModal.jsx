@@ -44,13 +44,6 @@ export const SuccessModal = ({
         </h2>
 
         <div className="flex gap-4 justify-center">
-          <Button
-            size="medium"
-            variant="white"
-            onClick={handlePrimary}
-          >
-            {isIngreso ? "Registrar otro ingreso" : "Añadir otro producto"}
-          </Button>
 
           <Button
             size="medium"
