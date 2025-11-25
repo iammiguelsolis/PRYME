@@ -12,8 +12,8 @@ import {
 
 import { Link } from "react-router-dom";
 import { Select } from '../components/atoms/Select';
-import { Modal } from '../components/molecules/Modal';
-import { InfoRow } from '../components/atoms/InfoRow';
+import { Modal } from '../../ventasDashboard/components/organisms/Modal';
+import { InfoRow } from '../../ventasDashboard/components/molecules/InfoRow';
 import { Button } from '../../../globals/components/atomos/Button';
 import { useInventario } from '../../../context/InventarioContext';
 
@@ -375,6 +375,7 @@ export default function InventarioDashboard() {
         isOpen={showProductDetail}
         onClose={() => setShowProductDetail(false)}
         title="Detalle de Producto"
+        width='max-w-xl'
       >
         {selectedProduct && (
           <div className="space-y-5">
@@ -462,18 +463,18 @@ export default function InventarioDashboard() {
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-xs">
-                  <thead className="bg-neutral-02/60">
+                  <thead className="bg-primary-01 text-text-03">
                     <tr>
-                      <th className="px-2 py-2 font-semibold text-text-01 text-center">
+                      <th className="px-2 py-2 font-semibold text-text-03 text-center">
                         ID Ingreso
                       </th>
-                      <th className="px-2 py-2 font-semibold text-text-01 text-center">
+                      <th className="px-2 py-2 font-semibold text-text-03 text-center">
                         Cantidad
                       </th>
-                      <th className="px-2 py-2 font-semibold text-text-01 text-center">
+                      <th className="px-2 py-2 font-semibold text-text-03 text-center">
                         Costo total (S/.)
                       </th>
-                      <th className="px-2 py-2 font-semibold text-text-01 text-center">
+                      <th className="px-2 py-2 font-semibold text-text-03 text-center">
                         Detalle
                       </th>
                     </tr>
