@@ -355,10 +355,10 @@ const ProfileSecurityCard = ({ user = {}, onSecurityUpdated }) => {
 // =========================
 const PerfilPage = () => {
   const mockUser = {
-    nombre: "Nombre",
-    apellido: "Apellido",
+    nombre: "Miguel Alonso",
+    apellido: "Solis Cunza",
     rol: "Administrador",
-    email: "usuario@pryme.com",
+    email: "miguel@solis.com",
     telefono: "987654321",
     sucursal: "Lima Centro",
   };

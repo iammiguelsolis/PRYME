@@ -17,6 +17,8 @@ import {
 
 import SidebarLink from '../moleculas/SidebarLink';
 import { IoAccessibilityOutline } from 'react-icons/io5';
+import { IoMdExit } from "react-icons/io";
+
 
 export const Sidebar = () => {
   const navigate = useNavigate();
@@ -142,8 +144,8 @@ export const Sidebar = () => {
       <div className="flex-grow" />
 
       {/* Zona inferior: Perfil */}
-      <div className="pt-3 border-t border-neutral-02 mt-3">
-        <div onClick={() => navigate('/perfil')}>
+      <div className="pt-3 border-t border-neutral-02 mt-3 flex gap-2 w-full">
+        <div className='w-full' onClick={() => navigate('/perfil')}>
           <SidebarLink
             icon={HiOutlineUser}
             isActive={isActive('/perfil')}
@@ -152,7 +154,32 @@ export const Sidebar = () => {
             {!isCollapsed && 'Mi perfil'}
           </SidebarLink>
         </div>
+
+        {
+          !isCollapsed && (
+            <div>
+              <button
+                className='rounded-2xl mr-5 p-2 hover:bg-neutral-03/60 transition-colors cursor-pointer' 
+                onClick={() => navigate('/')}
+              >
+                <IoMdExit className="w-7 h-7 text-red-500 mt-1" />
+              </button>
+            </div>
+          )
+        }
       </div>
+      {
+          isCollapsed && (
+            <div>
+              <button
+                className='rounded-2xl mr-5 p-2 hover:bg-neutral-03/60 transition-colors cursor-pointer' 
+                onClick={() => navigate('/')}
+              >
+                <IoMdExit className="w-7 h-7 text-red-500 mt-1" />
+              </button>
+            </div>
+          )
+      }
     </aside>
   );
 };
