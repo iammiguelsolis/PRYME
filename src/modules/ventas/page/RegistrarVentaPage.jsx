@@ -1,10 +1,9 @@
-// ========================================
-// src/modules/ventas/page/RegistrarVentaPage.jsx
-// ========================================
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVentas } from '../../../context/VentasContext';
+import { useKeyboardNavigation } from '../../../hooks/useKeyboardNavigation';
+import { ContextualHelp } from '../../../globals/components/moleculas/ContextualHelp';
 
 import { ClientInfoForm } from '../components/organismos/ClientInfoForm';
 import { ProductList } from '../components/organismos/ProductList';
@@ -39,6 +38,28 @@ const RegistrarVentaPage = () => {
   const [productosVenta, setProductosVenta] = useState([]);
   const [descuento, setDescuento] = useState(0);
 
+  // ====== Navegación por teclado ======
+  useKeyboardNavigation({
+    onSave: () => {
+      // Ctrl+S para guardar
+      if (productosVenta.length > 0) {
+        handleRegistrarVenta();
+      }
+    },
+    onCancel: () => {
+      // ESC para cancelar
+      if (isAddModalOpen) {
+        setAddModalOpen(false);
+      } else if (isSuccessModalOpen) {
+        setSuccessModalOpen(false);
+      } else if (isVentaSuccessOpen) {
+        setVentaSuccessOpen(false);
+      } else {
+        navigate('/ventas');
+      }
+    }
+  });
+
   // Buscar cliente cuando cambia el DNI
   const handleDniChange = (dni) => {
     setDatosCliente((prev) => ({ ...prev, dni }));
@@ -54,7 +75,6 @@ const RegistrarVentaPage = () => {
       }
     }
 
-    // limpiar error de DNI
     setErrors((prev) => {
       const newErr = { ...prev };
       delete newErr.dni;
@@ -96,9 +116,7 @@ const RegistrarVentaPage = () => {
   const subtotal = productosVenta.reduce((sum, p) => sum + p.subtotal, 0);
   const total = subtotal - descuento;
 
-  // ==============================
-  // Validación sin alert()
-  // ==============================
+  // Validación
   const validarFormulario = () => {
     const newErrors = {};
 
@@ -161,15 +179,32 @@ const RegistrarVentaPage = () => {
     setErrors({});
   };
 
-  // ==============================
-  // Render
-  // ==============================
   return (
     <div className="h-screen flex flex-col p-6 bg-neutral-03">
       {/* Breadcrumb */}
       <h1 className="text-l font-bold text-text-01 bg-neutral-01 rounded-4xl shadow-md p-2 px-4 flex flex-col mb-4">
         Ventas / Registrar Venta
       </h1>
+
+      {/* ===== AYUDA CONTEXTUAL ===== */}
+      <ContextualHelp
+        title="¿Cómo registrar una venta?"
+        variant="info"
+        steps={[
+          "Completa los datos del cliente: nombre, DNI, teléfono, canal y método de pago.",
+          "Haz clic en 'Añadir Producto' para agregar los productos que se venderán.",
+          "Opcionalmente, aplica un descuento en la sección de totales.",
+          "Revisa el resumen: verifica productos, cantidades y el total final.",
+          "Haz clic en 'Registrar Venta' o presiona Ctrl+S para completar."
+        ]}
+        tips={[
+          "Si el cliente ya existe, al ingresar su DNI se autocompletarán sus datos.",
+          "Puedes agregar múltiples productos antes de registrar la venta.",
+          "El sistema te alertará si aplicas un descuento mayor al 50%.",
+          "Presiona ESC para cancelar en cualquier momento."
+        ]}
+        className="mb-4"
+      />
 
       {/* Formulario Cliente */}
       <ClientInfoForm

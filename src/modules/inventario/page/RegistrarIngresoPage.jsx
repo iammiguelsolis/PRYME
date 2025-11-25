@@ -1,6 +1,10 @@
+// src/modules/inventario/page/RegistrarIngresoPage.jsx (MODIFICADO con ayuda contextual)
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInventario } from '../../../context/InventarioContext';
+import { useKeyboardNavigation } from '../../../hooks/useKeyboardNavigation';
+import { ContextualHelp } from '../../../globals/components/moleculas/ContextualHelp';
 
 import { EntryInfoForm } from '../components/organisms/EntryInfoForm';
 import { BatchList } from '../components/organisms/BatchList';
@@ -24,7 +28,7 @@ const RegistrarIngresoPage = () => {
   const [datosIngreso, setDatosIngreso] = useState(initialIngresoState);
   const [lotes, setLotes] = useState([]);
 
-  // ===== Errores de validación (inline) =====
+  // ===== Errores de validación =====
   const [errors, setErrors] = useState({});
 
   // ===== Modales =====
@@ -33,13 +37,30 @@ const RegistrarIngresoPage = () => {
   const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
   const [nuevoIngresoId, setNuevoIngresoId] = useState(null);
 
-  // ==========================
+  // ===== Navegación por teclado =====
+  useKeyboardNavigation({
+    onSave: () => {
+      if (lotes.length > 0) {
+        handleRegistrarIngreso();
+      }
+    },
+    onCancel: () => {
+      if (isAddModalOpen) {
+        setAddModalOpen(false);
+      } else if (isSuccessProductOpen) {
+        setSuccessProductOpen(false);
+      } else if (isSuccessModalOpen) {
+        setSuccessModalOpen(false);
+      } else {
+        navigate('/inventario');
+      }
+    }
+  });
+
   // Handlers de formulario
-  // ==========================
   const handleIngresoChange = (nuevoDatos) => {
     setDatosIngreso(nuevoDatos);
 
-    // Limpieza de errores campo a campo
     setErrors((prev) => {
       const updated = { ...prev };
       if (nuevoDatos.proveedor) delete updated.proveedor;
@@ -63,7 +84,6 @@ const RegistrarIngresoPage = () => {
       },
     ]);
 
-    // Si había error de lotes, lo limpiamos
     setErrors((prev) => {
       const updated = { ...prev };
       delete updated.lotes;
@@ -71,7 +91,7 @@ const RegistrarIngresoPage = () => {
     });
 
     setAddModalOpen(false);
-    setSuccessProductOpen(true); // modal "Producto añadido con éxito"
+    setSuccessProductOpen(true);
   };
 
   // Eliminar producto del lote
@@ -86,9 +106,7 @@ const RegistrarIngresoPage = () => {
     0
   );
 
-  // ==========================
-  // Validación (sin alert())
-  // ==========================
+  // Validación
   const validate = () => {
     const newErrors = {};
 
@@ -115,7 +133,6 @@ const RegistrarIngresoPage = () => {
   // Registrar el ingreso completo
   const handleRegistrarIngreso = () => {
     if (!validate()) {
-      // Si hay errores, no seguimos
       return;
     }
 
@@ -128,7 +145,7 @@ const RegistrarIngresoPage = () => {
     setSuccessModalOpen(true);
   };
 
-  // Después del éxito (ingreso completo)
+  // Después del éxito
   const handleSuccessClose = () => {
     setSuccessModalOpen(false);
     setLotes([]);
@@ -136,7 +153,6 @@ const RegistrarIngresoPage = () => {
     setErrors({});
   };
 
-  // Modal "producto añadido"
   const handleSuccessProductClose = () => {
     setSuccessProductOpen(false);
   };
@@ -146,14 +162,6 @@ const RegistrarIngresoPage = () => {
     setAddModalOpen(true);
   };
 
-  const handleVolverAInventario = () => {
-    setSuccessModalOpen(false);
-    navigate('/inventario');
-  };
-
-  // ==========================
-  // JSX
-  // ==========================
   return (
     <div className="h-screen flex flex-col p-6 bg-neutral-03">
       {/* Breadcrumb */}
@@ -161,11 +169,31 @@ const RegistrarIngresoPage = () => {
         Inventario / Ingresos / Registrar Ingreso
       </h1>
 
+      {/* ===== AYUDA CONTEXTUAL ===== */}
+      <ContextualHelp
+        title="¿Cómo registrar un ingreso de inventario?"
+        variant="info"
+        steps={[
+          "Selecciona el proveedor, la sucursal de destino y confirma la fecha del ingreso.",
+          "Haz clic en 'Añadir Producto' para agregar cada producto del lote.",
+          "Para cada producto, ingresa: modelo, color, talla, cantidad y costo unitario.",
+          "Revisa el resumen: total de unidades y costo total del ingreso.",
+          "Haz clic en 'Registrar Ingreso' o presiona Ctrl+S para completar."
+        ]}
+        tips={[
+          "Si el producto ya existe, el sistema actualizará automáticamente su stock.",
+          "Puedes agregar múltiples productos en un mismo ingreso.",
+          "Los costos unitarios se actualizarán con cada nuevo ingreso.",
+          "Presiona ESC para cancelar la operación en cualquier momento."
+        ]}
+        className="mb-4"
+      />
+
       {/* Formulario info del ingreso */}
       <EntryInfoForm
         datos={datosIngreso}
         onChange={handleIngresoChange}
-        errors={errors}               // 👈 aquí pasan los errores a los Select/Input
+        errors={errors}
       />
 
       {/* Lista de productos/lotes */}

@@ -6,6 +6,7 @@ import {
   HiOutlineArchiveBox, 
   HiOutlineTag, 
   HiOutlineChartBar,
+  HiOutlineQuestionMarkCircle, 
   HiOutlineUser,          // 👈 nuevo icono
 } from 'react-icons/hi2';
 
@@ -64,6 +65,15 @@ export const Sidebar = () => {
               isActive={isActive('/reportes')}
             >
               Reportes
+            </SidebarLink>
+          </li>
+
+          <li onClick={() => navigate('/ayuda')}>
+            <SidebarLink
+              icon={HiOutlineQuestionMarkCircle}
+              isActive={isActive('/ayuda')}
+            >
+              Ayuda
             </SidebarLink>
           </li>
 

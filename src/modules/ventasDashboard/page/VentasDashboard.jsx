@@ -16,6 +16,8 @@ import { useVentas } from '../../../context/VentasContext';
 import { FaInfoCircle } from "react-icons/fa";
 import { ActiveFiltersChips } from '../components/molecules/ActiveFiltersChips';
 import { SortableTableHeader } from '../components/molecules/SortableTableHeader';
+import { ContextualHelp, InlineHelp } from '../../../globals/components/moleculas/ContextualHelp';
+import { useKeyboardNavigation } from '../../../hooks/useKeyboardNavigation';
 
 
 
@@ -144,6 +146,21 @@ export default function VentasDashboard() {
       'plin': 'Plin'
     }
   };
+
+  useKeyboardNavigation({
+    onCancel: () => {
+      if (showReturn) {
+        setShowReturn(false);
+        setSelectedItems([]);
+      } else if (showDetail) {
+        setShowDetail(false);
+      } else if (showProduct) {
+        setShowProduct(false);
+      } else if (showSuccess) {
+        setShowSuccess(false);
+      }
+    }
+  });
 
   // Abrir modal de detalle
   const handleVerDetalle = (venta) => {
@@ -484,10 +501,34 @@ export default function VentasDashboard() {
           )}
         </Modal>
 
-        {/* Modal Productos para devolver */}
-        <Modal isOpen={showReturn} onClose={() => setShowReturn(false)} title="Productos para devolver" width="max-w-lg">
+        {/* Modal Productos para devolver (MODIFICADO) */}
+        <Modal isOpen={showReturn} onClose={() => setShowReturn(false)} title="Productos para devolver" width="max-w-4xl">
           {selectedSale && (
             <>
+              {/* ===== AYUDA CONTEXTUAL PARA DEVOLUCIONES ===== */}
+              <ContextualHelp
+                title="¿Cómo procesar una devolución?"
+                variant="warning"
+                steps={[
+                  "Revisa la lista de productos vendidos en esta venta.",
+                  "Marca los checkboxes de los productos que el cliente está devolviendo.",
+                  "Puedes devolver uno o varios productos de la misma venta.",
+                  "Haz clic en 'Devolver' para confirmar la operación.",
+                ]}
+                tips={[
+                  "El inventario se actualizará automáticamente sumando las unidades devueltas.",
+                  "El total de la venta se recalculará restando los productos devueltos.",
+                  "La devolución quedará registrada en el sistema para futuras consultas.",
+                  "Presiona ESC para cancelar la devolución."
+                ]}
+                className="mb-4"
+              />
+
+              <InlineHelp 
+                text="Los productos marcados se devolverán al inventario y el total de la venta se ajustará automáticamente."
+                className="text-s mb-3"
+              />
+
               <p className="text-sm font-semibold text-[#0F172A] mb-3">Productos Vendidos</p>
               <table className="w-full mb-4">
                 <thead className="bg-[#1B8EF2]">
@@ -515,14 +556,39 @@ export default function VentasDashboard() {
                   ))}
                 </tbody>
               </table>
-              <div className="flex justify-center">
+
+              {/* Mostrar resumen de devolución si hay items seleccionados */}
+              {selectedItems.length > 0 && (
+                <div className="bg-orange-50 border-2 border-complementary-01 rounded-xl p-4 mb-4">
+                  <p className="text-sm font-semibold text-complementary-01 mb-2">
+                    📦 Resumen de devolución
+                  </p>
+                  <p className="text-xs text-text-01">
+                    Se devolverán <strong>{selectedItems.length}</strong> producto(s) por un total de{' '}
+                    <strong>
+                      S/. {selectedItems.reduce((sum, i) => sum + selectedSale.productos[i].subtotal, 0).toFixed(2)}
+                    </strong>
+                  </p>
+                </div>
+              )}
+
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={() => {
+                    setShowReturn(false);
+                    setSelectedItems([]);
+                  }}
+                  className="px-5 py-2 border-2 border-neutral-02 text-text-01 rounded-full text-sm transition-all hover:bg-neutral-03"
+                >
+                  Cancelar (ESC)
+                </button>
                 <button 
                   onClick={handleConfirmarDevolucion}
                   disabled={selectedItems.length === 0}
-                  className={`px-5 py-2 border border-[#F29F1B] text-[#F29F1B] rounded-full text-sm transition-all inline-flex items-center gap-2
+                  className={`px-5 py-2 border-2 border-[#F29F1B] text-[#F29F1B] rounded-full text-sm transition-all inline-flex items-center gap-2
                     ${selectedItems.length === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-orange-50'}`}
                 >
-                  Devolver <Trash2 size={16} />
+                  Devolver ({selectedItems.length}) <Trash2 size={16} />
                 </button>
               </div>
             </>
