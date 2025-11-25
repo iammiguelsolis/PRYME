@@ -14,6 +14,8 @@ import { Button } from '../../../globals/components/atomos/Button';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useVentas } from '../../../context/VentasContext';
 import { FaInfoCircle } from "react-icons/fa";
+import { ActiveFiltersChips } from '../components/molecules/ActiveFiltersChips';
+import { SortableTableHeader } from '../components/molecules/SortableTableHeader';
 
 
 
@@ -28,6 +30,10 @@ export default function VentasDashboard() {
     sucursal: '', 
     metodo: '' 
   });
+
+  // Estado para ordenamiento
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
   
   const [showDetail, setShowDetail] = useState(false);
   const [showReturn, setShowReturn] = useState(false);
@@ -46,7 +52,7 @@ export default function VentasDashboard() {
       const venta = ventas.find(v => String(v.id) === String(ventaIdParam));
       if (venta) {
         setSelectedSale(venta);
-        setShowDetail(true);   // 👈 abre el modal de Detalle
+        setShowDetail(true);
       }
     }
   }, [ventaIdParam, ventas]);
@@ -66,6 +72,78 @@ export default function VentasDashboard() {
       return matchId && matchNombre && matchDoc && matchCanal && matchSucursal && matchMetodo;
     });
   }, [ventas, filters]);
+
+  // Ordenar ventas filtradas
+  const ventasOrdenadas = useMemo(() => {
+    if (!sortColumn) return ventasFiltradas;
+
+    return [...ventasFiltradas].sort((a, b) => {
+      let aValue = a[sortColumn];
+      let bValue = b[sortColumn];
+
+      // Manejo especial para diferentes tipos de datos
+      if (sortColumn === 'total') {
+        aValue = parseFloat(aValue);
+        bValue = parseFloat(bValue);
+      } else if (sortColumn === 'cliente') {
+        aValue = a.clienteFull || '';
+        bValue = b.clienteFull || '';
+      } else {
+        aValue = String(aValue || '').toLowerCase();
+        bValue = String(bValue || '').toLowerCase();
+      }
+
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [ventasFiltradas, sortColumn, sortDirection]);
+
+  // Manejar ordenamiento
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      // Cambiar dirección si es la misma columna
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Nueva columna, ordenar ascendente por defecto
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
+  // Remover un filtro específico
+  const handleRemoveFilter = (filterKey) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterKey]: ''
+    }));
+  };
+
+  // Labels para los filtros
+  const filterLabels = {
+    id: 'ID Venta',
+    nombre: 'Cliente',
+    doc: 'Documento',
+    canal: 'Canal',
+    sucursal: 'Sucursal',
+    metodo: 'Método de Pago'
+  };
+
+  // Labels para valores de filtros
+  const valueLabels = {
+    canal: {
+      'tiktok': 'Tik Tok',
+      'instagram': 'Instagram'
+    },
+    sucursal: {
+      'nofisico': 'No físico',
+      'lima': 'Lima Centro'
+    },
+    metodo: {
+      'yape': 'Yape',
+      'plin': 'Plin'
+    }
+  };
 
   // Abrir modal de detalle
   const handleVerDetalle = (venta) => {
@@ -189,6 +267,17 @@ export default function VentasDashboard() {
           <div className="p-5 flex items-center justify-between">
             <div className='w-full pr-6'>
               <DashboardCardHeader title="Lista de Ventas"/>
+              <p className="text-sm text-gray-600 mt-1">
+                Resultados según filtros aplicados · {ventasOrdenadas.length} resultado{ventasOrdenadas.length !== 1 ? 's' : ''}
+              </p>
+              
+              {/* Chips de filtros activos */}
+              <ActiveFiltersChips
+                filters={filters}
+                onRemoveFilter={handleRemoveFilter}
+                filterLabels={filterLabels}
+                valueLabels={valueLabels}
+              />
             </div>
             <Button
               size="medium"
@@ -206,20 +295,66 @@ export default function VentasDashboard() {
             <table className="w-full">
               <thead className="bg-[#1B8EF2] sticky top-0 z-10">
                 <tr>
-                  <th className="px-2 py-3 text-xs font-medium text-white text-center">ID Venta</th>
-                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Nombre Cliente</th>
-                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Doc Identidad</th>
-                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Canal</th>
-                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Metodo de Pago</th>
-                  <th className="px-2 py-3 text-xs font-medium text-white text-center">Total (S/.)</th>
-                  <th className="px-8 py-3 text-xs font-medium text-white text-center">Detalle</th>
-                  <th className="px-8 py-3 text-xs font-medium text-white text-center">Acción</th>
+                  <SortableTableHeader
+                    column="id"
+                    label="ID Venta"
+                    sortColumn={sortColumn}
+                    sortDirection={sortDirection}
+                    onSort={handleSort}
+                  />
+                  <SortableTableHeader
+                    column="cliente"
+                    label="Nombre Cliente"
+                    sortColumn={sortColumn}
+                    sortDirection={sortDirection}
+                    onSort={handleSort}
+                  />
+                  <SortableTableHeader
+                    column="dni"
+                    label="Doc Identidad"
+                    sortColumn={sortColumn}
+                    sortDirection={sortDirection}
+                    onSort={handleSort}
+                  />
+                  <SortableTableHeader
+                    column="canal"
+                    label="Canal"
+                    sortColumn={sortColumn}
+                    sortDirection={sortDirection}
+                    onSort={handleSort}
+                  />
+                  <SortableTableHeader
+                    column="metodo"
+                    label="Método de Pago"
+                    sortColumn={sortColumn}
+                    sortDirection={sortDirection}
+                    onSort={handleSort}
+                  />
+                  <SortableTableHeader
+                    column="total"
+                    label="Total (S/.)"
+                    sortColumn={sortColumn}
+                    sortDirection={sortDirection}
+                    onSort={handleSort}
+                  />
+                  <SortableTableHeader
+                    column=""
+                    label="Detalle"
+                    sortable={false}
+                    className="px-8"
+                  />
+                  <SortableTableHeader
+                    column=""
+                    label="Acción"
+                    sortable={false}
+                    className="px-8"
+                  />
                 </tr>
               </thead>
 
               <tbody>
-                {ventasFiltradas.length > 0 ? (
-                  ventasFiltradas.map((venta) => (
+                {ventasOrdenadas.length > 0 ? (
+                  ventasOrdenadas.map((venta) => (
                     <tr key={venta.id} className="border-b border-[#E4E7EE]">
                       <td className="px-2 py-4 text-sm text-center text-[#0F172A]">{venta.id}</td>
                       <td className="px-2 py-4 text-sm text-center text-[#0F172A]">{venta.cliente}</td>
@@ -266,10 +401,6 @@ export default function VentasDashboard() {
               </tbody>
             </table>
           </div>
-
-
-          {/* SOLO Tbody con Scroll */}
-          
         </div>
 
         {/* Modal Detalle de Venta */}

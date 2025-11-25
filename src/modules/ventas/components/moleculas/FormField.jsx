@@ -1,9 +1,8 @@
-// ../moleculas/FormField.jsx
 import { Input } from "../atomos/Input";
 import { Label } from "../atomos/Label";
 
 export const FormField = (props) => {
-  const { id, label, title, ...rest } = props;
+  const { id, label, title, error, ...rest } = props;
 
   return (
     <div title={title || ""} className="flex flex-col gap-1 w-full">
@@ -12,7 +11,15 @@ export const FormField = (props) => {
           {label}
         </Label>
       )}
-      <Input id={id} {...rest} />
+
+      {/* Input ya sabe pintar el borde rojo si recibe error */}
+      <Input id={id} error={!!error} {...rest} />
+
+      {error && (
+        <p className="mt-1 text-xs text-red-500">
+          {error}
+        </p>
+      )}
     </div>
   );
 };
