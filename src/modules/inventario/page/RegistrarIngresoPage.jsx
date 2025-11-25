@@ -12,15 +12,7 @@ const RegistrarIngresoPage = () => {
   const navigate = useNavigate();
   const { registrarIngreso } = useInventario();
 
-  // Estados para modales
-  const [isSuccessProductOpen, setSuccessProductOpen] = useState(false);
-
-
-  const [isAddModalOpen, setAddModalOpen] = useState(false);
-  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false); // <-- Nombre corregido
-  const [nuevoIngresoId, setNuevoIngresoId] = useState(null);
-
-  // Estado del formulario de ingreso
+  // ===== Estado base del formulario =====
   const initialIngresoState = {
     proveedor: '',
     telefono: '',
@@ -28,79 +20,140 @@ const RegistrarIngresoPage = () => {
     sucursal: 'lima',
     fecha: new Date().toISOString().split('T')[0],
   };
-  const [datosIngreso, setDatosIngreso] = useState(initialIngresoState);
 
-  // Lista de lotes/productos a ingresar
+  const [datosIngreso, setDatosIngreso] = useState(initialIngresoState);
   const [lotes, setLotes] = useState([]);
+
+  // ===== Errores de validación (inline) =====
+  const [errors, setErrors] = useState({});
+
+  // ===== Modales =====
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [isSuccessProductOpen, setSuccessProductOpen] = useState(false);
+  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
+  const [nuevoIngresoId, setNuevoIngresoId] = useState(null);
+
+  // ==========================
+  // Handlers de formulario
+  // ==========================
+  const handleIngresoChange = (nuevoDatos) => {
+    setDatosIngreso(nuevoDatos);
+
+    // Limpieza de errores campo a campo
+    setErrors((prev) => {
+      const updated = { ...prev };
+      if (nuevoDatos.proveedor) delete updated.proveedor;
+      if (nuevoDatos.sucursal) delete updated.sucursal;
+      if (nuevoDatos.fecha) delete updated.fecha;
+      return updated;
+    });
+  };
 
   // Agregar producto al lote
   const handleAddProduct = (nuevoProducto) => {
-    setLotes(prev => [...prev, {
-      id: Date.now(),
-      modelo: nuevoProducto.modelo,
-      color: nuevoProducto.color,
-      talla: nuevoProducto.talla,
-      cantidad: nuevoProducto.cantidad,
-      costoUnitario: nuevoProducto.costoUnitario,
-    }]);
+    setLotes((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        modelo: nuevoProducto.modelo,
+        color: nuevoProducto.color,
+        talla: nuevoProducto.talla,
+        cantidad: nuevoProducto.cantidad,
+        costoUnitario: nuevoProducto.costoUnitario,
+      },
+    ]);
+
+    // Si había error de lotes, lo limpiamos
+    setErrors((prev) => {
+      const updated = { ...prev };
+      delete updated.lotes;
+      return updated;
+    });
 
     setAddModalOpen(false);
-    setSuccessProductOpen(true);   // 👈 para mostrar el modal de éxito de producto
+    setSuccessProductOpen(true); // modal "Producto añadido con éxito"
   };
-
 
   // Eliminar producto del lote
   const handleRemoveProduct = (id) => {
-    setLotes(prev => prev.filter(l => l.id !== id));
+    setLotes((prev) => prev.filter((l) => l.id !== id));
   };
 
   // Calcular totales
   const totalUnidades = lotes.reduce((sum, l) => sum + l.cantidad, 0);
-  const totalCosto = lotes.reduce((sum, l) => sum + (l.cantidad * l.costoUnitario), 0);
+  const totalCosto = lotes.reduce(
+    (sum, l) => sum + l.cantidad * l.costoUnitario,
+    0
+  );
+
+  // ==========================
+  // Validación (sin alert())
+  // ==========================
+  const validate = () => {
+    const newErrors = {};
+
+    if (!datosIngreso.proveedor) {
+      newErrors.proveedor = 'Debes seleccionar un proveedor.';
+    }
+
+    if (!datosIngreso.sucursal) {
+      newErrors.sucursal = 'Debes seleccionar una sucursal.';
+    }
+
+    if (!datosIngreso.fecha) {
+      newErrors.fecha = 'Debes seleccionar una fecha.';
+    }
+
+    if (lotes.length === 0) {
+      newErrors.lotes = 'Debes agregar al menos un producto al ingreso.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   // Registrar el ingreso completo
   const handleRegistrarIngreso = () => {
-    if (lotes.length === 0) {
-      alert('Debe agregar al menos un producto');
-      return;
-    }
-    if (!datosIngreso.proveedor) {
-      alert('Debe seleccionar un proveedor');
+    if (!validate()) {
+      // Si hay errores, no seguimos
       return;
     }
 
-    // Llamar al contexto para registrar
     const idGenerado = registrarIngreso({
       ...datosIngreso,
-      lotes: lotes
+      lotes: lotes,
     });
 
     setNuevoIngresoId(idGenerado);
-    setSuccessModalOpen(true); // <-- CORREGIDO (antes: setIsSuccessModalOpen)
+    setSuccessModalOpen(true);
   };
 
-  // Después del éxito
+  // Después del éxito (ingreso completo)
   const handleSuccessClose = () => {
     setSuccessModalOpen(false);
-    setLotes([]);              // aquí sí tiene sentido limpiar
+    setLotes([]);
     setDatosIngreso(initialIngresoState);
+    setErrors({});
   };
 
+  // Modal "producto añadido"
   const handleSuccessProductClose = () => {
-    setSuccessProductOpen(false);   // solo cerrar el modal
+    setSuccessProductOpen(false);
   };
 
   const handleAddOtherProduct = () => {
-    setSuccessProductOpen(false);   // cierro el modal de éxito
-    setAddModalOpen(true);          // vuelvo a abrir el modal de agregar producto
+    setSuccessProductOpen(false);
+    setAddModalOpen(true);
   };
 
   const handleVolverAInventario = () => {
-    setSuccessModalOpen(false); // <-- CORREGIDO
+    setSuccessModalOpen(false);
     navigate('/inventario');
   };
 
-
+  // ==========================
+  // JSX
+  // ==========================
   return (
     <div className="h-screen flex flex-col p-6 bg-neutral-03">
       {/* Breadcrumb */}
@@ -109,20 +162,28 @@ const RegistrarIngresoPage = () => {
       </h1>
 
       {/* Formulario info del ingreso */}
-      <EntryInfoForm 
+      <EntryInfoForm
         datos={datosIngreso}
-        onChange={setDatosIngreso}
+        onChange={handleIngresoChange}
+        errors={errors}               // 👈 aquí pasan los errores a los Select/Input
       />
 
       {/* Lista de productos/lotes */}
-      <BatchList 
+      <BatchList
         lotes={lotes}
         onAddProductClick={() => setAddModalOpen(true)}
         onRemoveProduct={handleRemoveProduct}
       />
 
+      {/* Error asociado a lotes */}
+      {errors.lotes && (
+        <p className="mt-2 text-l font-bold text-red-500">
+          {errors.lotes}
+        </p>
+      )}
+
       {/* Totales */}
-      <EntryTotal 
+      <EntryTotal
         totalUnidades={totalUnidades}
         totalCosto={totalCosto}
         onRegisterSaleClick={handleRegistrarIngreso}
@@ -136,7 +197,6 @@ const RegistrarIngresoPage = () => {
         onAdd={handleAddProduct}
       />
 
-      {/* Producto añadido */}
       {/* Modal éxito al añadir producto */}
       <SuccessModal
         title="Producto añadido con éxito"
@@ -151,8 +211,6 @@ const RegistrarIngresoPage = () => {
         onClose={handleSuccessClose}
         onRegisterAnother={handleSuccessClose}
       />
-
-
     </div>
   );
 };
