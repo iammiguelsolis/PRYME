@@ -20,9 +20,29 @@ export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
   };
 
   const handleSubmit = () => {
-    // Validaciones
-    if (!formData.modelo || !formData.cantidad || !formData.color || !formData.talla || !formData.costoUnitario) {
+    // Validaciones de campos vacíos
+    if (
+      !formData.modelo ||
+      !formData.cantidad ||
+      !formData.color ||
+      !formData.talla ||
+      !formData.costoUnitario
+    ) {
       alert('Por favor complete todos los campos');
+      return;
+    }
+
+    const cantidadNum = Number(formData.cantidad);
+    const costoNum = Number(formData.costoUnitario);
+
+    // Validación lógica adicional
+    if (Number.isNaN(cantidadNum) || cantidadNum <= 0) {
+      alert('La cantidad debe ser al menos 1');
+      return;
+    }
+
+    if (Number.isNaN(costoNum) || costoNum < 0) {
+      alert('El costo unitario no puede ser negativo');
       return;
     }
 
@@ -30,11 +50,11 @@ export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
       modelo: formData.modelo,
       color: formData.color,
       talla: formData.talla,
-      cantidad: parseInt(formData.cantidad),
-      costoUnitario: parseFloat(formData.costoUnitario),
+      cantidad: cantidadNum,
+      costoUnitario: costoNum,
     });
 
-    // Limpiar form
+    // Limpiar form (pero NO cerrar el modal, eso lo manejas afuera si quieres)
     setFormData({
       modelo: '',
       cantidad: '',
@@ -78,22 +98,35 @@ export const AddProductModal = ({ isOpen, onClose, onAdd }) => {
             <option value="NB 560 Grey">NB 560 Grey</option>
           </SelectField>
 
+          {/* Cantidad: mínimo 1 y clamp en onChange */}
           <FormField 
             label="Cantidad" 
             id="cantidad" 
             placeholder="Ej: 10" 
             type="number"
+            min={1}
             value={formData.cantidad}
-            onChange={(e) => handleChange('cantidad', e.target.value)}
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              const safe = Number.isNaN(value) ? '' : Math.max(1, Math.floor(value));
+              handleChange('cantidad', safe);
+            }}
           />
 
+          {/* Costo Unitario: mínimo 0, con decimales */}
           <FormField 
             label="Costo Unitario (S/.)" 
             id="costoUnitario" 
             placeholder="Ej: 180.00" 
             type="number"
+            min={0}
+            step="0.01"
             value={formData.costoUnitario}
-            onChange={(e) => handleChange('costoUnitario', e.target.value)}
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              const safe = Number.isNaN(value) ? '' : Math.max(0, value);
+              handleChange('costoUnitario', safe);
+            }}
           />
 
           <SelectField 

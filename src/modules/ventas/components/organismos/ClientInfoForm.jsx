@@ -1,8 +1,9 @@
+// ../organisms/ClientInfoForm.jsx
 import { FormField } from "../moleculas/FormField";
 import { SectionHeader } from "../moleculas/SectionHeader";
 import { SelectField } from "../moleculas/SelectField";
 
-export const ClientInfoForm = ({ datos, onChange, onDniChange }) => {
+export const ClientInfoForm = ({ datos, onChange, onDniChange, errors = {} }) => {
   
   const handleChange = (field, value) => {
     if (field === 'dni' && onDniChange) {
@@ -18,24 +19,28 @@ export const ClientInfoForm = ({ datos, onChange, onDniChange }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div className="lg:col-span-2">
           <FormField
-            title="Apellido" 
+            title="Nombre" 
             label="Nombre" 
             id="nombre" 
             placeholder="Nombre del cliente"
             value={datos.nombreCliente}
             onChange={(e) => handleChange('nombreCliente', e.target.value)}
+            error={errors.nombreCliente}
           />
         </div>
+
         <div className="lg:col-span-1">
           <FormField 
-            title="Telefono"
-            label="Telefono" 
+            title="Teléfono"
+            label="Teléfono" 
             id="telefono" 
             placeholder="+51 999 999 999"
             value={datos.telefono}
             onChange={(e) => handleChange('telefono', e.target.value)}
+            error={errors.telefono}
           />
         </div>
+
         <div className="lg:col-span-1">
           <FormField 
             title="Doc. Identidad"
@@ -44,8 +49,10 @@ export const ClientInfoForm = ({ datos, onChange, onDniChange }) => {
             placeholder="DNI / RUC"
             value={datos.dni}
             onChange={(e) => handleChange('dni', e.target.value)}
+            error={errors.dni}
           />
         </div>
+
         <div className="lg:col-span-2 grid grid-cols-3 gap-4">
           <SelectField 
             title={datos.canal || "Seleccione Canal"}
@@ -53,6 +60,7 @@ export const ClientInfoForm = ({ datos, onChange, onDniChange }) => {
             id="canal"
             value={datos.canal}
             onChange={(e) => handleChange('canal', e.target.value)}
+            error={errors.canal}
           >
             <option value="">Seleccione</option>
             <option value="Tik Tok">Tik Tok</option>
@@ -61,22 +69,26 @@ export const ClientInfoForm = ({ datos, onChange, onDniChange }) => {
             <option value="WhatsApp">WhatsApp</option>
             <option value="Web">Web</option>
           </SelectField>
+
           <SelectField 
             title={datos.sucursal.toUpperCase() || "Seleccione Sucursal"}
             label="Sucursal" 
             id="sucursal"
             value={datos.sucursal}
             onChange={(e) => handleChange('sucursal', e.target.value)}
+            error={errors.sucursal}
           >
             <option value="nofisico">No físico</option>
             <option value="lima">Lima Centro</option>
           </SelectField>
+
           <SelectField 
-            title={datos.metodoPago || "Seleccione Metodo de Pago"}
-            label="Metodo de Pago" 
+            title={datos.metodoPago || "Seleccione Método de Pago"}
+            label="Método de Pago" 
             id="metodoPago"
             value={datos.metodoPago}
             onChange={(e) => handleChange('metodoPago', e.target.value)}
+            error={errors.metodoPago}
           >
             <option value="">Seleccione</option>
             <option value="Yape">Yape</option>

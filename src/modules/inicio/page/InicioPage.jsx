@@ -140,7 +140,7 @@ const InicioPage = () => {
           title="Últimos Ingresos de Inventario"
           headers={inventarioData.headers}
           data={inventarioData.data}
-          buttonText="Ir a Ingresos"
+          buttonText="Ir a Inventario / Ingresos"
           buttonHref="/inventario/ingreso"
           buttonIcon={<HiOutlineArchiveBox className="w-6 h-6" />}
           buttonIconPosition="right"

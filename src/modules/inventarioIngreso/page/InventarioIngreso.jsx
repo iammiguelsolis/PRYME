@@ -20,6 +20,8 @@ import { useInventario } from '../../../context/InventarioContext';
 
 import InventarioTableCard from '../components/organismos/InventarioTableCard';
 import { InventoryCardHeader } from '../components/molecules/InventoryCardHeader';
+import { ActiveFiltersChips } from '../components/molecules/ActiveFiltersChips';
+import { SortableTableHeader } from '../components/molecules/SortableTableHeader';
 
 import { MdFilterAltOff } from 'react-icons/md';
 import { FaSearch } from 'react-icons/fa';
@@ -46,7 +48,7 @@ export default function InventarioIngreso() {
       const ingreso = ingresos.find(ing => String(ing.id) === String(ingresoIdParam));
       if (ingreso) {
         setSelectedIngreso(ingreso);
-        setShowIngresoDetail(true);  // 👈 abre el modal de Detalle de Ingreso
+        setShowIngresoDetail(true);
       }
     }
   }, [ingresoIdParam, ingresos]);
@@ -65,6 +67,10 @@ export default function InventarioIngreso() {
     sucursal: '',
     tipo: ''
   });
+
+  // Estado para ordenamiento de ingresos
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
 
   // ==========================
   // Filtros productos
@@ -116,6 +122,39 @@ export default function InventarioIngreso() {
     });
   }, [filtersIngreso, ingresos]);
 
+  // Ordenar ingresos filtrados
+  const ingresosOrdenados = useMemo(() => {
+    if (!sortColumn) return ingresosFiltrados;
+
+    return [...ingresosFiltrados].sort((a, b) => {
+      let aValue = a[sortColumn];
+      let bValue = b[sortColumn];
+
+      // Manejo especial para cantidad (numérico)
+      if (sortColumn === 'cantidad') {
+        aValue = parseFloat(aValue);
+        bValue = parseFloat(bValue);
+      } else {
+        aValue = String(aValue || '').toLowerCase();
+        bValue = String(bValue || '').toLowerCase();
+      }
+
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [ingresosFiltrados, sortColumn, sortDirection]);
+
+  // Manejar ordenamiento
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
+
   // ==========================
   // Handlers
   // ==========================
@@ -140,6 +179,42 @@ export default function InventarioIngreso() {
       sucursal: '',
       tipo: ''
     });
+  };
+
+  // Remover un filtro específico de ingresos
+  const handleRemoveFilterIngreso = (filterKey) => {
+    setFiltersIngreso(prev => ({
+      ...prev,
+      [filterKey]: ''
+    }));
+  };
+
+  // Labels para filtros de ingresos
+  const ingresoFilterLabels = {
+    proveedor: 'Proveedor',
+    fecha: 'Fecha',
+    sucursal: 'Sucursal',
+    tipo: 'Tipo de Ingreso'
+  };
+
+  // Labels para valores de filtros de ingresos
+  const ingresoValueLabels = {
+    proveedor: {
+      'adidas': 'Adidas Perú',
+      'nike': 'Nike Perú',
+      'latam': 'Adidas Latam'
+    },
+    fecha: {
+      'hoy': 'Hoy',
+      'semana': 'Esta semana'
+    },
+    sucursal: {
+      'lima': 'Lima Centro'
+    },
+    tipo: {
+      'compra': 'Compra',
+      'devolucion': 'Devolución'
+    }
   };
 
   // ==========================
@@ -243,44 +318,130 @@ export default function InventarioIngreso() {
               </Button>
             </div>
           </div>
+
           {/* LISTA DE INGRESOS */}
-          <InventarioTableCard
-            title="Lista de ingresos"
-            subtitle={`Movimientos recientes de inventario · ${ingresosFiltrados.length} resultados`}
-            headers={ingresosHeaders}
-            items={ingresosFiltrados}
-            buttonText="Registrar ingreso"
-            linkTo="/inventario/registrarIngreso"
-            buttonIcon={<HiPlus className="w-6 h-6" />}
-            buttonIconPosition="left"
-            emptyMessage="No se encontraron ingresos con los filtros seleccionados."
-            renderRow={(ing, index) => (
-              <tr
-                key={index}
-                className="border-b border-neutral-02 last:border-0 hover:bg-neutral-01/60 transition-colors"
+          <div className="bg-neutral-01 rounded-3xl shadow-md border border-neutral-02 p-4">
+            {/* Header con título y botón */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex-1">
+                <InventoryCardHeader title="Lista de ingresos" />
+                <p className="text-sm text-gray-600 mt-1">
+                  Resultados según filtros aplicados · {ingresosOrdenados.length} resultado{ingresosOrdenados.length !== 1 ? 's' : ''}
+                </p>
+
+                {/* Chips de filtros activos */}
+                <ActiveFiltersChips
+                  filters={filtersIngreso}
+                  onRemoveFilter={handleRemoveFilterIngreso}
+                  filterLabels={ingresoFilterLabels}
+                  valueLabels={ingresoValueLabels}
+                />
+              </div>
+
+              <Button
+                size="medium"
+                variant="secondaryUNO"
+                className="flex items-center gap-2 whitespace-nowrap ml-4"
+                onClick={() => window.location.href = "/inventario/registrarIngreso"}
+                icon={<HiPlus className="w-6 h-6" />}
+                iconPosition="left"
               >
-                <td className="px-3 py-2 text-sm text-center text-text-01">
-                  {ing.id}
-                </td>
-                <td className="px-3 py-2 text-sm text-center text-text-01">
-                  {ing.proveedor}
-                </td>
-                <td className="px-3 py-2 text-sm text-center text-text-01">
-                  {ing.producto}
-                </td>
-                <td className="px-3 py-2 text-sm text-center text-text-01">
-                  {ing.cantidad}
-                </td>
-                <td className="px-3 py-2 text-center ">
-                  <Button 
-                    size="small" variant="white" icon={<FaInfoCircle  className="w-5 h-5"/>} iconPosition='right' onClick={()=>handleVerDetalleIngreso(ing)} 
-                  >
-                    Ver detalle
-                  </Button>
-                </td>
-              </tr>
-            )}
-          />
+                Registrar ingreso
+              </Button>
+            </div>
+
+            {/* Tabla con scroll */}
+            <div className="max-h-[600px] overflow-y-auto rounded-2xl">
+              <table className="w-full">
+                <thead className="bg-[#1B8EF2] sticky top-0 z-10">
+                  <tr>
+                    <SortableTableHeader
+                      column="id"
+                      label="ID Ingreso"
+                      sortColumn={sortColumn}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                      className="px-3"
+                    />
+                    <SortableTableHeader
+                      column="proveedor"
+                      label="Proveedor"
+                      sortColumn={sortColumn}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                      className="px-3"
+                    />
+                    <SortableTableHeader
+                      column="producto"
+                      label="Producto"
+                      sortColumn={sortColumn}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                      className="px-3"
+                    />
+                    <SortableTableHeader
+                      column="cantidad"
+                      label="Cantidad"
+                      sortColumn={sortColumn}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                      className="px-3"
+                    />
+                    <SortableTableHeader
+                      column=""
+                      label="Detalle"
+                      sortable={false}
+                      className="px-3"
+                    />
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {ingresosOrdenados.length > 0 ? (
+                    ingresosOrdenados.map((ing, index) => (
+                      <tr
+                        key={index}
+                        className="border-b border-[#E4E7EE] hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-3 py-3 text-sm text-center text-[#0F172A]">
+                          {ing.id}
+                        </td>
+                        <td className="px-3 py-3 text-sm text-center text-[#0F172A]">
+                          {ing.proveedor}
+                        </td>
+                        <td className="px-3 py-3 text-sm text-center text-[#0F172A]">
+                          {ing.producto}
+                        </td>
+                        <td className="px-3 py-3 text-sm text-center text-[#0F172A]">
+                          {ing.cantidad}
+                        </td>
+                        <td className="px-3 py-3 text-center">
+                          <Button 
+                            size="small" 
+                            variant="white" 
+                            icon={<FaInfoCircle className="w-5 h-5"/>} 
+                            iconPosition='right' 
+                            onClick={() => handleVerDetalleIngreso(ing)} 
+                          >
+                            Ver detalle
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={ingresosHeaders.length}
+                        className="px-4 py-8 text-sm text-center text-gray-500"
+                      >
+                        No se encontraron ingresos con los filtros seleccionados
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -19,6 +19,8 @@ import { useInventario } from '../../../context/InventarioContext';
 
 import InventarioTableCard from '../components/organismos/InventarioTableCard';
 import { InventoryCardHeader } from '../components/molecules/InventoryCardHeader';
+import { ActiveFiltersChips } from '../components/molecules/ActiveFiltersChips';
+import { SortableTableHeader } from '../components/molecules/SortableTableHeader';
 
 import { MdFilterAltOff } from 'react-icons/md';
 import { FaSearch } from 'react-icons/fa';
@@ -49,6 +51,10 @@ export default function InventarioDashboard() {
     tipo: ''
   });
 
+  // Estado para ordenamiento de productos
+  const [sortColumn, setSortColumn] = useState('');
+  const [sortDirection, setSortDirection] = useState('asc');
+
   // ==========================
   // Filtros productos
   // ==========================
@@ -64,6 +70,39 @@ export default function InventarioDashboard() {
       return matchModelo && matchColor && matchTalla;
     });
   }, [filters, productos]);
+
+  // Ordenar productos filtrados
+  const productosOrdenados = useMemo(() => {
+    if (!sortColumn) return productosFiltrados;
+
+    return [...productosFiltrados].sort((a, b) => {
+      let aValue = a[sortColumn];
+      let bValue = b[sortColumn];
+
+      // Manejo especial para talla (numérico)
+      if (sortColumn === 'talla') {
+        aValue = parseFloat(aValue);
+        bValue = parseFloat(bValue);
+      } else {
+        aValue = String(aValue || '').toLowerCase();
+        bValue = String(bValue || '').toLowerCase();
+      }
+
+      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [productosFiltrados, sortColumn, sortDirection]);
+
+  // Manejar ordenamiento
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortDirection('asc');
+    }
+  };
 
   // ==========================
   // Filtros ingresos
@@ -125,6 +164,46 @@ export default function InventarioDashboard() {
     });
   };
 
+  // Remover un filtro específico de productos
+  const handleRemoveFilterProducto = (filterKey) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterKey]: ''
+    }));
+  };
+
+  // Labels para filtros de productos
+  const filterLabels = {
+    modelo: 'Modelo',
+    color: 'Color',
+    talla: 'Talla',
+    sucursal: 'Sucursal'
+  };
+
+  // Labels para valores de filtros de productos
+  const valueLabels = {
+    modelo: {
+      'nike': 'Nike',
+      'adidas': 'Adidas',
+      'nb': 'New Balance'
+    },
+    color: {
+      'verde': 'Verde',
+      'negro': 'Negro',
+      'blanco': 'Blanco',
+      'gris': 'Gris'
+    },
+    talla: {
+      '39': '39',
+      '40': '40',
+      '41': '41',
+      '42': '42'
+    },
+    sucursal: {
+      'lima': 'Lima Centro'
+    }
+  };
+
   // ==========================
   // Headers para las tablas
   // ==========================
@@ -152,17 +231,19 @@ export default function InventarioDashboard() {
         <div className="space-y-4">
           {/* BUSCAR PRODUCTO */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-primary-01 rounded-2xl p-6 shadow-md">
+            <div className="bg-neutral-01 rounded-3xl shadow-md border border-neutral-02 p-6">
               
-              <InventoryCardHeader title={"Buscar Producto"} color="white" />
-              <p className="text-xl text-blue-100 mb-5">
-                Filtra por modelo, color, talla y sucursal
-              </p>
+              <div className="mb-5">
+                <InventoryCardHeader title={"Buscar Producto"} />
+                <p className="text-sm text-gray-600 mt-2">
+                  Filtra por modelo, color, talla y sucursal
+                </p>
+              </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-4xl mx-auto">
+              <div className="grid grid-cols-2 gap-4 mb-6">
                 <Select
                   title="Modelo"
-                  placeholder="Modelo"
+                  placeholder="Seleccionar modelo"
                   options={[
                     { value: 'nike', label: 'Nike' },
                     { value: 'adidas', label: 'Adidas' },
@@ -173,7 +254,7 @@ export default function InventarioDashboard() {
                 />
                 <Select
                   title="Color"
-                  placeholder="Color"
+                  placeholder="Seleccionar color"
                   options={[
                     { value: 'verde', label: 'Verde' },
                     { value: 'negro', label: 'Negro' },
@@ -185,7 +266,7 @@ export default function InventarioDashboard() {
                 />
                 <Select
                   title="Talla"
-                  placeholder="Talla"
+                  placeholder="Seleccionar talla"
                   options={[
                     { value: '39', label: '39' },
                     { value: '40', label: '40' },
@@ -197,18 +278,18 @@ export default function InventarioDashboard() {
                 />
                 <Select
                   title="Sucursal"
-                  placeholder="Sucursal"
+                  placeholder="Seleccionar sucursal"
                   options={[{ value: 'lima', label: 'Lima Centro' }]}
                   value={filters.sucursal}
                   onChange={(e) => setFilters({ ...filters, sucursal: e.target.value })}
                 />
               </div>
 
-              <div className="flex gap-3 justify-end mt-8">
+              <div className="flex gap-3 justify-end pt-4 border-t border-neutral-02">
                 <Button
                   size="medium"
                   variant="white"
-                  className="-mt-2 flex items-center gap-2"
+                  className="flex items-center gap-2"
                   onClick={limpiarFiltrosProductos}
                   icon={<MdFilterAltOff className="w-4 h-4" />}
                   iconPosition="right"
@@ -217,8 +298,8 @@ export default function InventarioDashboard() {
                 </Button>
                 <Button
                   size="medium"
-                  variant="white"
-                  className="-mt-2 flex items-center gap-2"
+                  variant="secondaryUNO"
+                  className="flex items-center gap-2"
                   icon={<FaSearch className="w-4 h-4" />}
                   iconPosition="right"
                 >
@@ -305,6 +386,17 @@ export default function InventarioDashboard() {
             {/* Título + subtítulo, igual que en las otras cards */}
             <div className='mx-0'>
               <InventoryCardHeader title="Lista de productos" />
+              <p className="text-sm text-gray-600 mt-1">
+                Resultados según filtros aplicados · {productosOrdenados.length} resultado{productosOrdenados.length !== 1 ? 's' : ''}
+              </p>
+
+              {/* Chips de filtros activos */}
+              <ActiveFiltersChips
+                filters={filters}
+                onRemoveFilter={handleRemoveFilterProducto}
+                filterLabels={filterLabels}
+                valueLabels={valueLabels}
+              />
             </div>
 
             {/* Contenedor scrollable con header sticky (mismo estilo que la tabla de ventas) */}
@@ -312,17 +404,46 @@ export default function InventarioDashboard() {
               <table className="w-full">
                 <thead className="bg-[#1B8EF2] sticky top-0 z-10">
                   <tr>
-                    <th className="px-2 py-3 text-xs font-medium text-white text-center">SKU</th>
-                    <th className="px-2 py-3 text-xs font-medium text-white text-center">Producto</th>
-                    <th className="px-2 py-3 text-xs font-medium text-white text-center">Color</th>
-                    <th className="px-2 py-3 text-xs font-medium text-white text-center">Talla</th>
-                    <th className="px-6 py-3 text-xs font-medium text-white text-center">Detalle</th>
+                    <SortableTableHeader
+                      column="sku"
+                      label="SKU"
+                      sortColumn={sortColumn}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                    <SortableTableHeader
+                      column="producto"
+                      label="Producto"
+                      sortColumn={sortColumn}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                    <SortableTableHeader
+                      column="color"
+                      label="Color"
+                      sortColumn={sortColumn}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                    <SortableTableHeader
+                      column="talla"
+                      label="Talla"
+                      sortColumn={sortColumn}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                    <SortableTableHeader
+                      column=""
+                      label="Detalle"
+                      sortable={false}
+                      className="px-6"
+                    />
                   </tr>
                 </thead>
 
                 <tbody>
-                  {productosFiltrados.length > 0 ? (
-                    productosFiltrados.map((p, index) => (
+                  {productosOrdenados.length > 0 ? (
+                    productosOrdenados.map((p, index) => (
                       <tr
                         key={index}
                         className="border-b border-[#E4E7EE] hover:bg-gray-50 transition-colors"

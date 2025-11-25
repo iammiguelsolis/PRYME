@@ -16,13 +16,13 @@ const RegistrarVentaPage = () => {
   const navigate = useNavigate();
   const { registrarVenta, buscarClientePorDni } = useVentas();
 
-  // Estados para modales
+  // ====== Modales ======
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
   const [isVentaSuccessOpen, setVentaSuccessOpen] = useState(false);
   const [nuevaVentaId, setNuevaVentaId] = useState(null);
 
-  // Estado del cliente
+  // ====== Cliente ======
   const [datosCliente, setDatosCliente] = useState({
     nombreCliente: '',
     dni: '',
@@ -32,85 +32,121 @@ const RegistrarVentaPage = () => {
     metodoPago: '',
   });
 
-  // Lista de productos en la venta
-  const [productosVenta, setProductosVenta] = useState([]);
+  // ====== Validaciones ======
+  const [errors, setErrors] = useState({});
 
-  // Descuento
+  // ====== Productos ======
+  const [productosVenta, setProductosVenta] = useState([]);
   const [descuento, setDescuento] = useState(0);
 
   // Buscar cliente cuando cambia el DNI
   const handleDniChange = (dni) => {
-    setDatosCliente(prev => ({ ...prev, dni }));
-    
-    // Autocompletar si encuentra cliente
+    setDatosCliente((prev) => ({ ...prev, dni }));
+
     if (dni.length >= 8) {
       const cliente = buscarClientePorDni(dni);
       if (cliente) {
-        setDatosCliente(prev => ({
+        setDatosCliente((prev) => ({
           ...prev,
           nombreCliente: cliente.nombre,
-          telefono: cliente.telefono
+          telefono: cliente.telefono,
         }));
       }
     }
+
+    // limpiar error de DNI
+    setErrors((prev) => {
+      const newErr = { ...prev };
+      delete newErr.dni;
+      return newErr;
+    });
   };
 
-  // Agregar producto a la venta
+  // Agregar producto
   const handleAddProduct = (nuevoProducto) => {
-    setProductosVenta(prev => [...prev, {
-      id: Date.now(),
-      modelo: nuevoProducto.modelo,
-      color: nuevoProducto.color,
-      talla: nuevoProducto.talla,
-      cantidad: nuevoProducto.cantidad,
-      precioUnitario: nuevoProducto.precioUnitario,
-      subtotal: nuevoProducto.cantidad * nuevoProducto.precioUnitario,
-    }]);
+    setProductosVenta((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        modelo: nuevoProducto.modelo,
+        color: nuevoProducto.color,
+        talla: nuevoProducto.talla,
+        cantidad: nuevoProducto.cantidad,
+        precioUnitario: nuevoProducto.precioUnitario,
+        subtotal: nuevoProducto.cantidad * nuevoProducto.precioUnitario,
+      },
+    ]);
+
+    setErrors((prev) => {
+      const newErr = { ...prev };
+      delete newErr.productos;
+      return newErr;
+    });
+
     setAddModalOpen(false);
     setSuccessModalOpen(true);
   };
 
   // Eliminar producto
   const handleRemoveProduct = (id) => {
-    setProductosVenta(prev => prev.filter(p => p.id !== id));
+    setProductosVenta((prev) => prev.filter((p) => p.id !== id));
   };
 
-  // Calcular totales
+  // Totales
   const subtotal = productosVenta.reduce((sum, p) => sum + p.subtotal, 0);
   const total = subtotal - descuento;
 
+  // ==============================
+  // Validación sin alert()
+  // ==============================
+  const validarFormulario = () => {
+    const newErrors = {};
+
+    if (productosVenta.length === 0) {
+      newErrors.productos = 'Debes agregar al menos un producto.';
+    }
+
+    if (!datosCliente.nombreCliente.trim()) {
+      newErrors.nombreCliente = 'Debes ingresar el nombre del cliente.';
+    }
+
+    if (!datosCliente.dni.trim()) {
+      newErrors.dni = 'Debes ingresar el documento de identidad.';
+    }
+
+    if (!datosCliente.canal) {
+      newErrors.canal = 'Debes seleccionar un canal de venta.';
+    }
+
+    if (!datosCliente.metodoPago) {
+      newErrors.metodoPago = 'Debes seleccionar un método de pago.';
+    }
+
+    if (!datosCliente.telefono) {
+      newErrors.telefono = 'Debes ingresar el teléfono del cliente.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // Registrar la venta
   const handleRegistrarVenta = () => {
-    if (productosVenta.length === 0) {
-      alert('Debe agregar al menos un producto');
-      return;
-    }
-    if (!datosCliente.nombreCliente) {
-      alert('Debe ingresar el nombre del cliente');
-      return;
-    }
-    if (!datosCliente.canal) {
-      alert('Debe seleccionar un canal de venta');
-      return;
-    }
-    if (!datosCliente.metodoPago) {
-      alert('Debe seleccionar un método de pago');
-      return;
-    }
+    if (!validarFormulario()) return;
 
     const idGenerado = registrarVenta({
       ...datosCliente,
       productos: productosVenta,
       subtotal,
       descuento,
-      total
+      total,
     });
 
     setNuevaVentaId(idGenerado);
     setVentaSuccessOpen(true);
   };
 
-  // Limpiar formulario después de registrar
+  // Limpiar formulario
   const limpiarFormulario = () => {
     setProductosVenta([]);
     setDescuento(0);
@@ -122,8 +158,12 @@ const RegistrarVentaPage = () => {
       sucursal: 'nofisico',
       metodoPago: '',
     });
+    setErrors({});
   };
 
+  // ==============================
+  // Render
+  // ==============================
   return (
     <div className="h-screen flex flex-col p-6 bg-neutral-03">
       {/* Breadcrumb */}
@@ -131,22 +171,28 @@ const RegistrarVentaPage = () => {
         Ventas / Registrar Venta
       </h1>
 
-      {/* Formulario cliente */}
-      <ClientInfoForm 
+      {/* Formulario Cliente */}
+      <ClientInfoForm
         datos={datosCliente}
         onChange={setDatosCliente}
         onDniChange={handleDniChange}
+        errors={errors}
       />
 
-      {/* Lista de productos */}
-      <ProductList 
+      {/* Lista de Productos */}
+      <ProductList
         productos={productosVenta}
         onAddProductClick={() => setAddModalOpen(true)}
         onRemoveProduct={handleRemoveProduct}
       />
 
+      {/* Error si no hay productos */}
+      {errors.productos && (
+        <p className="text-red-500 text-xs mt-2">{errors.productos}</p>
+      )}
+
       {/* Totales */}
-      <SaleTotal 
+      <SaleTotal
         subtotal={subtotal}
         descuento={descuento}
         total={total}
@@ -156,14 +202,14 @@ const RegistrarVentaPage = () => {
       />
 
       {/* Modal Agregar Producto */}
-      <AddProductModal 
-        isOpen={isAddModalOpen} 
+      <AddProductModal
+        isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
         onAdd={handleAddProduct}
       />
-      
+
       {/* Modal Producto Añadido */}
-      <SuccessModal 
+      <SuccessModal
         isOpen={isSuccessModalOpen}
         onClose={() => setSuccessModalOpen(false)}
         title="Producto Añadido con Éxito"
@@ -177,7 +223,7 @@ const RegistrarVentaPage = () => {
       />
 
       {/* Modal Venta Registrada */}
-      <SuccessModal 
+      <SuccessModal
         isOpen={isVentaSuccessOpen}
         onClose={() => {
           setVentaSuccessOpen(false);
