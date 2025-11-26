@@ -15,6 +15,7 @@ import AyudaPage from "./modules/ayuda/page/AyudaPage";
 import { InventarioProvider } from "./context/InventarioContext";
 import { VentasProvider } from "./context/VentasContext";
 import ClientesModule from "./modules/clientes/ClientesModule";
+// final
 
 function App() {
   return (

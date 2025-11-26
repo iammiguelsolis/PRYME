@@ -11,6 +11,7 @@ import {
   HiOutlineEnvelope,
   HiOutlinePhone
 } from 'react-icons/hi2';
+// final
 
 const AyudaPage = () => {
   const [activeTab, setActiveTab] = useState('inicio');

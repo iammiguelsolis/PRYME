@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+// final
 
 /**
  * Hook para navegación por teclado en toda la aplicación

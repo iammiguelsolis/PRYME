@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* === Paleta de Colores Personalizada === */
 @theme {
   /* Primarios */
   --color-primary-01: #1B8EF2;
